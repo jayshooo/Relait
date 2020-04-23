@@ -4,8 +4,9 @@
     "private": true,
     "scripts": {
         "android": "react-native run-android",
-        "ios": "rm -rf $TMPDIR/metro-* && watchman watch-del-all && react-native run-ios",
+        "ios": "npm run reset-metro && react-native run-ios",
         "start": "react-native start",
+        "reset-metro": "rm -rf $TMPDIR/metro-* && watchman watch-del-all",
         "test": "jest",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
     },
