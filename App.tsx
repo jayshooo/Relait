@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     SafeAreaView,
     StyleSheet,
     Text,
     StatusBar,
 } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 
 declare const global: { HermesInternal: null | {}; };
 
 const App = () => {
+
+    useEffect(() => {
+        setTimeout(() => {
+            SplashScreen.hide();
+        }, 1000);
+    }, []);
+
     return (
         <>
             <StatusBar barStyle="dark-content" />
