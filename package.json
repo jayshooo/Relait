@@ -3,8 +3,9 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "android": "react-native run-android",
-        "ios": "npm run reset-metro && react-native run-ios",
+        "ios": "sh ./iOS.sh",
+        "ios-6s-serve": "tsc && npm run reset-metro && react-native run-ios --simulator 'iPhone 6s'",
+        "ios-max-serve": "tsc && npm run reset-metro && react-native run-ios --simulator 'iPhone 11 Pro Max'",
         "start": "react-native start",
         "reset-metro": "rm -rf $TMPDIR/metro-* && watchman watch-del-all",
         "test": "jest",
