@@ -1,21 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     SafeAreaView,
     StyleSheet,
     Text,
     StatusBar,
 } from 'react-native';
+// import { useSelector } from 'react-redux';
+// import { RootState } from './src/store/reducers';
+import NetInfo from "@react-native-community/netinfo";
 import SplashScreen from 'react-native-splash-screen';
 
 declare const global: { HermesInternal: null | {}; };
 
 const App = () => {
 
+    const [ isConnected, setIsConnected ] = useState(false);
+
+    NetInfo.fetch().then(state => {
+        setIsConnected(state.isConnected);
+    });
+
     useEffect(() => {
-        setTimeout(() => {
+
+        if (isConnected) {
             SplashScreen.hide();
-        }, 1000);
-    }, []);
+        }
+
+    }, [ isConnected ]);
 
     return (
         <>
@@ -38,5 +49,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
+
 
 export default App;
