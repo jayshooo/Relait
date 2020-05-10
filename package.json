@@ -3,16 +3,22 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "android": "react-native run-android",
-        "ios": "npm run reset-metro && react-native run-ios",
+        "ios": "sh ./iOS.sh",
+        "ios-6s-serve": "tsc && npm run reset-metro && react-native run-ios --simulator 'iPhone 6s'",
+        "ios-max-serve": "tsc && npm run reset-metro && react-native run-ios --simulator 'iPhone 11 Pro Max'",
         "start": "react-native start",
         "reset-metro": "rm -rf $TMPDIR/metro-* && watchman watch-del-all",
         "test": "jest",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
     },
     "dependencies": {
+        "@react-native-community/netinfo": "^5.8.0",
+        "@types/react-redux": "^7.1.8",
         "react": "16.11.0",
-        "react-native": "0.62.2"
+        "react-native": "0.62.2",
+        "react-native-splash-screen": "^3.2.0",
+        "react-redux": "^7.2.0",
+        "redux": "^4.0.5"
     },
     "devDependencies": {
         "@babel/core": "^7.6.2",
