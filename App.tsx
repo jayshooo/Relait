@@ -24,10 +24,14 @@ const App = () => {
 
     useEffect(() => {
 
-        NetInfo.fetch().then(state => {
+        const hideSplashScreen = setTimeout(() => {
             SplashScreenHelper.hide();
+        }, 1500);
+
+        NetInfo.fetch().then(state => {
             if (state.isConnected) {
-                // TODO 로그인 스크린으로 이동
+                // TODO 로그인 되어있지 않다면 로그인 스크린으로 이동
+                // 로그인 되어있다면 메인 스크린으로 이동
             }
             else {
                 dispatch(showAlert({
@@ -50,6 +54,10 @@ const App = () => {
                 }));
             }
         });
+
+        return () => {
+            clearTimeout(hideSplashScreen);
+        };
 
     }, []);
 
