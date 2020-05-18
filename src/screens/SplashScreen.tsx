@@ -56,6 +56,8 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
                     cancelable: false,
                 }));
             }
+        }).catch(e => {
+            throw new Error(e);
         });
 
         return () => {
