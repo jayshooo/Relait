@@ -22,9 +22,9 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
 
     useEffect(() => {
 
-        const hideSplashScreen = setTimeout(() => {
+        setTimeout(() => {
             SplashScreenHelper.hide();
-        }, 1500);
+        }, 2000);
 
         NetInfo.fetch().then(state => {
             if (state.isConnected) {
@@ -58,10 +58,6 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
         }).catch(e => {
             throw new Error(e);
         });
-
-        return () => {
-            clearTimeout(hideSplashScreen);
-        };
 
     }, []);
 
