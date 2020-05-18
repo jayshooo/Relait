@@ -40,10 +40,9 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
                 dispatch(showAlert({
                     title: '네트워크 오류',
                     content: '네트워크 연결상태 확인좀;;',
-                    button: [
+                    buttons: [
                         {
                             text: "닫기",
-                            onPress: null,
                             style: "default",
                         },
                         {
@@ -69,7 +68,7 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
     useEffect(() => {
 
         if (alertObj.visible) {
-            Alert.alert(alertObj.title, alertObj.content, alertObj.button, {
+            Alert.alert(alertObj.title, alertObj.content, alertObj.buttons, {
                 cancelable: alertObj.cancelable,
             });
         }
