@@ -6,7 +6,7 @@ const initialState = {
         visible: false,
         title: '',
         content: '',
-        button: [],
+        buttons: [],
         cancelable: false,
     }
 };
@@ -28,7 +28,7 @@ const ui = (state: UiInitialState = initialState, action: UiActionTypes) => {
                     visible: false,
                     title: '',
                     content: '',
-                    button: [],
+                    buttons: [],
                     cancelable: false,
                 }
             };

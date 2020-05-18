@@ -1,12 +1,12 @@
 #! /bin/bash
 
 PS3='Please Select Simulator: '
-options=("6s" "11 Pro Max" "Quit")
+options=("8" "11 Pro Max" "Quit")
 item=''
 select opt in "${options[@]}"
 do
     case $opt in
-        "6s")
+        "8")
             item=$opt
             break
             ;;

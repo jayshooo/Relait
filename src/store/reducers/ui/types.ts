@@ -1,4 +1,4 @@
-import { AlertContentInterface } from 'src/store/actions/ui/types';
+import { AlertContentInterface } from '../../actions/ui/types';
 
 interface AlertObjInterface extends AlertContentInterface {
     visible: boolean;
