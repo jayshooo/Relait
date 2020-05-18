@@ -9,14 +9,14 @@ import {
 } from 'react-native';
 import { TextSize, TextWeight } from '../../constants/styles';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const LoginScreen = () => {
+
     return (
         <SafeAreaView
             style={ {
                 flex: 1,
-                borderWidth: 1,
             } }>
             <View
                 style={ {
