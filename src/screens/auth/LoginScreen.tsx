@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     Text,
     SafeAreaView,
@@ -7,11 +7,20 @@ import {
     View,
     TextStyle,
 } from 'react-native';
-import { TextSize, TextWeight } from '../../constants/styles';
+import KakaoLogins from '@react-native-seoul/kakao-login';
+import { TextSize, TextWeight, Color } from '../../constants/styles';
+import CommonButton from '../../components/CommonButton';
+
 
 const { width } = Dimensions.get('window');
 
 const LoginScreen = () => {
+
+    // useEffect(() => {
+    //     KakaoLogins.login().then(result => {
+    //         console.log(result);
+    //     });
+    // }, []);
 
     return (
         <SafeAreaView
@@ -49,6 +58,17 @@ const LoginScreen = () => {
                         fontWeight: TextWeight.bold
                     } as TextStyle }>어디서 작업할지{ '\n' }막막해?</Text>
             </View>
+            <CommonButton
+                icon={ require('../../resources/icons/Kakaotalk.png') }
+                buttonTitle={ '카카오계정으로 시작하기' }
+                onPressCallback={ () => {
+                    console.log('====================================');
+                    console.log('카카오 로그인 하기');
+                    console.log('====================================');
+                } }
+                buttonColor={ Color.kakaoYellow }
+                textColor={ Color.kakaoBrown }
+                hasShadow={ false } />
         </SafeAreaView>
     );
 };
