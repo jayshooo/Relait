@@ -3,7 +3,7 @@ import { View, Image, TouchableHighlight, Text, StyleProp, ViewStyle } from 'rea
 import { TextSize } from '../constants/styles';
 import { ICommonButton } from './types/CommonButton';
 
-const CommonButton = ({ icon, buttonTitle, onPressCallback, buttonColor, textColor, hasShadow = true }: ICommonButton) => {
+const CommonButton = ({ onLayout, icon, buttonTitle, onPressCallback, buttonColor, textColor, hasShadow = true, additioinalStyle = null }: ICommonButton) => {
 
     const hasIcon = !!icon;
     const shadowStyle: StyleProp<ViewStyle> = {
@@ -31,7 +31,12 @@ const CommonButton = ({ icon, buttonTitle, onPressCallback, buttonColor, textCol
 
     return (
         <TouchableHighlight
-            style={ buttonStyle }
+            onLayout={ ({ nativeEvent }) => {
+                if (!onLayout || !nativeEvent) return;
+                const { layout } = nativeEvent;
+                onLayout(layout);
+            } }
+            style={ [ buttonStyle, additioinalStyle ] }
             underlayColor={ buttonColor }
             activeOpacity={ .8 }
             onPress={ () => {
