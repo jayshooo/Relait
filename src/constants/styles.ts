@@ -2,6 +2,7 @@ export const Color = {
     purplishBlue: '#7440ff',
     kakaoYellow: '#ffe600',
     kakaoBrown: '#3d1e1f',
+    white: '#ffffff',
 };
 
 export const TextSize = {
