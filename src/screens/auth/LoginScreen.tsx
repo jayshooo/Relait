@@ -14,17 +14,20 @@ import { ASYNC_STORAGE_LOGIN_KEY } from '../../constants/constants';
 import CommonButton from '../../components/CommonButton';
 import { OverlayViewInterface } from './types/LoginScreen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation, StackActions } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
 const OverlayView: React.FC<OverlayViewInterface> = ({ onPressCloseButton }) => {
 
     const [ buttonHeight, setButtonHeight ] = useState(0);
+    const navigation = useNavigation();
 
     const Login = async () => {
         try {
             const LoginResult = await KakaoLogins.login();
             await AsyncStorage.setItem(ASYNC_STORAGE_LOGIN_KEY, JSON.stringify(LoginResult));
+            navigation.dispatch(StackActions.replace('MainScreen'));
         }
         catch (e) {
             throw new Error(e);
@@ -89,11 +92,6 @@ const OverlayView: React.FC<OverlayViewInterface> = ({ onPressCloseButton }) => 
 const LoginScreen: React.FC = () => {
 
     const [ showOverlayView, setShowOverlayView ] = useState(false);
-    // useEffect(() => {
-    //     KakaoLogins.login().then(result => {
-    //         console.log(result);
-    //     });
-    // }, []);
 
     return (
         <SafeAreaView
