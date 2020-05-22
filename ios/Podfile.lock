@@ -89,6 +89,12 @@ PODS:
   - OpenSSL-Universal (1.0.2.19):
     - OpenSSL-Universal/Static (= 1.0.2.19)
   - OpenSSL-Universal/Static (1.0.2.19)
+  - Permission-LocationAlways (2.1.5):
+    - RNPermissions
+  - Permission-LocationWhenInUse (2.1.5):
+    - RNPermissions
+  - Permission-Notifications (2.1.5):
+    - RNPermissions
   - RCTRequired (0.62.2)
   - RCTTypeSafety (0.62.2):
     - FBLazyVector (= 0.62.2)
@@ -361,6 +367,9 @@ DEPENDENCIES:
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - "kakao-login (from `../node_modules/@react-native-seoul/kakao-login`)"
+  - Permission-LocationAlways (from `../node_modules/react-native-permissions/ios/LocationAlways.podspec`)
+  - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse.podspec`)
+  - Permission-Notifications (from `../node_modules/react-native-permissions/ios/Notifications.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -425,6 +434,12 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   kakao-login:
     :path: "../node_modules/@react-native-seoul/kakao-login"
+  Permission-LocationAlways:
+    :path: "../node_modules/react-native-permissions/ios/LocationAlways.podspec"
+  Permission-LocationWhenInUse:
+    :path: "../node_modules/react-native-permissions/ios/LocationWhenInUse.podspec"
+  Permission-Notifications:
+    :path: "../node_modules/react-native-permissions/ios/Notifications.podspec"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -505,6 +520,9 @@ SPEC CHECKSUMS:
   kakao-login: 0d09b414480f7607739454eb1ac639e7b2ec44b0
   KakaoOpenSDK: 7a7b728491fc199bf2186fec5bbf2c70ba14f474
   OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
+  Permission-LocationAlways: 14ec76aa2912ea3a7ddc5b564d781bff51a5f3c8
+  Permission-LocationWhenInUse: 16ecd20d82341c6b4336dfe5520c098bea85a2f5
+  Permission-Notifications: 5ecb0f433b585c5621dc30b168772d60ae8574c2
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
   RCTTypeSafety: 93006131180074cffa227a1075802c89a49dd4ce
   React: 29a8b1a02bd764fb7644ef04019270849b9a7ac3
@@ -537,6 +555,6 @@ SPEC CHECKSUMS:
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: fbd16daf7b04ba40e0deaf8437e9185b30246484
+PODFILE CHECKSUM: 67ef48ba706c53cd5343292b59907c603cd847be
 
 COCOAPODS: 1.9.1
