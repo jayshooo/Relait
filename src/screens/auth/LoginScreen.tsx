@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Text,
     SafeAreaView,
@@ -7,18 +7,29 @@ import {
     View,
     TextStyle,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import KakaoLogins from '@react-native-seoul/kakao-login';
 import { TextSize, TextWeight, Color } from '../../constants/styles';
+import { ASYNC_STORAGE_LOGIN_KEY } from '../../constants/constants';
 import CommonButton from '../../components/CommonButton';
 import { OverlayViewInterface } from './types/LoginScreen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
 
 const { width } = Dimensions.get('window');
 
 const OverlayView: React.FC<OverlayViewInterface> = ({ onPressCloseButton }) => {
 
     const [ buttonHeight, setButtonHeight ] = useState(0);
+
+    const Login = async () => {
+        try {
+            const LoginResult = await KakaoLogins.login();
+            await AsyncStorage.setItem(ASYNC_STORAGE_LOGIN_KEY, JSON.stringify(LoginResult));
+        }
+        catch (e) {
+            throw new Error(e);
+        }
+    };
 
     return (
         <View
@@ -38,11 +49,7 @@ const OverlayView: React.FC<OverlayViewInterface> = ({ onPressCloseButton }) => 
                 <CommonButton
                     icon={ require('../../resources/icons/Kakaotalk.png') }
                     buttonTitle={ '카카오톡으로 간편 로그인' }
-                    onPressCallback={ () => {
-                        console.log('====================================');
-                        console.log('카카오톡으로 간편 로그인');
-                        console.log('====================================');
-                    } }
+                    onPressCallback={ Login }
                     buttonColor={ Color.kakaoYellow }
                     textColor={ Color.kakaoBrown }
                     hasShadow={ false }

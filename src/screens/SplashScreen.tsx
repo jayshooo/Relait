@@ -6,6 +6,7 @@ import {
     Image,
 } from 'react-native';
 import SplashScreenHelper from 'react-native-splash-screen';
+import AsyncStorage from '@react-native-community/async-storage';
 import RNRestart from 'react-native-restart';
 import NetInfo from "@react-native-community/netinfo";
 
@@ -13,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/reducers';
 import { showAlert } from '../store/actions/ui/action';
 import { Color } from '../constants/styles';
+import { ASYNC_STORAGE_LOGIN_KEY } from '../constants/constants';
 import { ISplashScreenProps } from './types/SplashScreen';
 
 const SplashScreen = ({ navigation }: ISplashScreenProps) => {
@@ -26,15 +28,22 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
             SplashScreenHelper.hide();
         }, 2000);
 
-        NetInfo.fetch().then(state => {
+        const getIsLogin = async (): Promise<boolean> => {
+            const result = await AsyncStorage.getItem(ASYNC_STORAGE_LOGIN_KEY);
+            return !!result;
+        };
+
+        NetInfo.fetch().then(async state => {
             if (state.isConnected) {
-                const isLogin = false;
+                const isLogin = await getIsLogin();
                 if (!isLogin) {
                     // 로그인 되어있지 않으면 로그인 화면으로 이동
                     navigation.replace('LoginScreen');
-                    return;
                 }
-                // 로그인 되어있으면 메인화면으로 이동
+                else {
+                    // 로그인 되어있으면 메인화면으로 이동
+                    navigation.replace('MainScreen');
+                }
             }
             else {
                 dispatch(showAlert({
