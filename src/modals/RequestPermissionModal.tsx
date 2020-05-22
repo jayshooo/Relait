@@ -1,5 +1,6 @@
-import React from 'react';
-import { Modal, View, Text, SafeAreaView, StyleProp, TextStyle, Image, ColorPropType } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { requestNotifications, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { Modal, View, Text, SafeAreaView, StyleProp, TextStyle, Image } from 'react-native';
 import { IRequestPermissionModal } from './types/RequestPermissionModal';
 import CommonButton from '../components/CommonButton';
 import { Color, TextWeight, TextSize } from '../constants/styles';
@@ -18,6 +19,45 @@ const permissionItems = [
 ];
 
 const RequestPermissionModal: React.FC<IRequestPermissionModal> = ({ visible, onRequestClose }) => {
+
+    const [ permissions, setPermissions ] = useState({
+        notification: false,
+        location: false,
+    });
+
+    useEffect(() => {
+        if (permissions.notification && permissions.location) {
+            onRequestClose();
+        }
+    }, [ permissions.notification, permissions.location ]);
+
+    const requestLocation = () => {
+        request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(result => {
+            if (result === RESULTS.GRANTED) {
+                onRequestClose();
+                setPermissions(prevPermissions => ({
+                    ...prevPermissions,
+                    location: true,
+                }));
+            }
+        }).catch(e => {
+            throw new Error(e);
+        });
+    };
+
+    const requestNotificationPermission = () => {
+        requestNotifications([ 'alert', 'sound' ]).then(({ status }) => {
+            if (status === RESULTS.GRANTED) {
+                setPermissions(prevPermissions => ({
+                    ...prevPermissions,
+                    notification: true,
+                }));
+                requestLocation();
+            }
+        }).catch(e => {
+            throw new Error(e);
+        });
+    };
 
     return (
         <Modal
@@ -53,6 +93,7 @@ const RequestPermissionModal: React.FC<IRequestPermissionModal> = ({ visible, on
                         const isLast = index === permissionItems.length - 1;
                         return (
                             <View
+                                key={ item.title }
                                 style={ {
                                     flexDirection: 'row',
                                     marginBottom: isLast ? 0 : 16,
@@ -83,10 +124,7 @@ const RequestPermissionModal: React.FC<IRequestPermissionModal> = ({ visible, on
                 hasShadow={ true }
                 buttonTitle={ '확인' }
                 onPressCallback={ () => {
-                    console.log('====================================');
-                    console.log('확인');
-                    console.log('====================================');
-                    onRequestClose();
+                    requestNotificationPermission();
                 } }
                 textColor={ Color.white }
                 textWeight={ TextWeight.bold }
