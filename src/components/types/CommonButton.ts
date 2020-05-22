@@ -8,5 +8,6 @@ export interface ICommonButton {
     onPressCallback: Function;
     buttonColor: string;
     textColor: string;
+    textWeight?: string;
     additioinalStyle?: StyleProp<ViewStyle> | null;
 }
