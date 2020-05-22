@@ -2,6 +2,8 @@ export const Color = {
     purplishBlue: '#7440ff',
     kakaoYellow: '#ffe600',
     kakaoBrown: '#3d1e1f',
+    gray: '#d4d9df',
+    darkGray: '#505b69',
     white: '#ffffff',
 };
 
