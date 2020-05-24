@@ -5,34 +5,57 @@ import RequestPermissionModal from '../modals/RequestPermissionModal';
 
 const MainScreen = () => {
 
-    const [ hasPermission, setHasPermission ] = useState(false);
+    const [ hasPermission, setHasPermission ] = useState(true);
+    const [ showRequestPermissionModal, setShowRequestPermissionModal ] = useState(false);
 
     useEffect(() => {
-        const hasLocationPermission = () => {
-            return check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(result => {
-                if (result !== RESULTS.GRANTED) {
-                    return false;
-                }
-                return true;
-            }).catch(e => {
-                throw new Error(e);
-            });
-        };
 
-        const hasNotificationPermission = () => {
-            return checkNotifications().then(({ status }) => {
-                if (status !== RESULTS.GRANTED) {
-                    return false;
-                }
-                return true;
-            }).catch(e => {
-                throw new Error(e);
-            });
-        };
+        setShowRequestPermissionModal(!hasPermission);
 
-        if (hasLocationPermission() && hasNotificationPermission()) {
-            setHasPermission(true);
+    }, [ hasPermission ]);
+
+    const hasLocationPermission = async () => {
+
+        try {
+            const result = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+
+            if (result !== RESULTS.GRANTED) {
+                return false;
+            }
+            return true;
         }
+        catch (e) {
+            throw new Error(e);
+        }
+
+    };
+
+    const hasNotificationPermission = async () => {
+
+        try {
+            const result = await checkNotifications();
+            const { status } = result;
+
+            if (status !== RESULTS.GRANTED) {
+                return false;
+            }
+            return true;
+        }
+        catch (e) {
+            throw new Error(e);
+        }
+
+    };
+
+    const checkPermissions = async () => {
+        if (!await hasLocationPermission() || !await hasNotificationPermission()) {
+            setHasPermission(false);
+        }
+    };
+
+    useEffect(() => {
+
+        checkPermissions();
 
     }, []);
 
@@ -47,7 +70,7 @@ const MainScreen = () => {
                 } }>
                 <Text>나는야 메인 스크린 ^오^</Text>
                 <RequestPermissionModal
-                    visible={ !hasPermission }
+                    visible={ showRequestPermissionModal }
                     onRequestClose={ () => {
                         setHasPermission(true);
                     } } />

@@ -40,6 +40,7 @@ const RequestPermissionModal: React.FC<IRequestPermissionModal> = ({ visible, on
                     location: true,
                 }));
             }
+            // TODO. 환경설정에서 ~~를 허용해주세요 얼럿 띄워야함
         }).catch(e => {
             throw new Error(e);
         });
@@ -54,6 +55,7 @@ const RequestPermissionModal: React.FC<IRequestPermissionModal> = ({ visible, on
                 }));
                 requestLocation();
             }
+            // TODO. 환경설정에서 ~~를 허용해주세요 얼럿 띄워야함
         }).catch(e => {
             throw new Error(e);
         });

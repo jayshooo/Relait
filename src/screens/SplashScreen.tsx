@@ -35,40 +35,50 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
             return !!result;
         };
 
-        NetInfo.fetch().then(async state => {
-            if (state.isConnected) {
-                const isLogin = await getIsLogin();
-                if (!isLogin) {
-                    // 로그인 되어있지 않으면 로그인 화면으로 이동
-                    navigation.replace('LoginScreen');
+        const checkNetInfo = async () => {
+
+            try {
+                const netInfoResult = await NetInfo.fetch();
+
+                const { isConnected } = netInfoResult;
+
+                if (isConnected) {
+                    const isLogin = await getIsLogin();
+                    if (!isLogin) {
+                        // 로그인 되어있지 않으면 로그인 화면으로 이동
+                        navigation.replace('LoginScreen');
+                    }
+                    else {
+                        // 로그인 되어있으면 메인화면으로 이동
+                        navigation.replace('MainScreen');
+                    }
                 }
                 else {
-                    // 로그인 되어있으면 메인화면으로 이동
-                    navigation.replace('MainScreen');
+                    dispatch(showAlert({
+                        title: '네트워크 오류',
+                        content: '네트워크 연결상태 확인좀;;',
+                        buttons: [
+                            {
+                                text: "닫기",
+                                style: "default",
+                            },
+                            {
+                                text: "다시시도",
+                                onPress: () => {
+                                    RNRestart.Restart();
+                                },
+                            },
+                        ],
+                        cancelable: false,
+                    }));
                 }
             }
-            else {
-                dispatch(showAlert({
-                    title: '네트워크 오류',
-                    content: '네트워크 연결상태 확인좀;;',
-                    buttons: [
-                        {
-                            text: "닫기",
-                            style: "default",
-                        },
-                        {
-                            text: "다시시도",
-                            onPress: () => {
-                                RNRestart.Restart();
-                            },
-                        },
-                    ],
-                    cancelable: false,
-                }));
+            catch (e) {
+                throw new Error(e);
             }
-        }).catch(e => {
-            throw new Error(e);
-        });
+        };
+
+        checkNetInfo();
 
     }, []);
 

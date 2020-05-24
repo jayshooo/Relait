@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import {
     Text,
     SafeAreaView,
@@ -12,86 +12,25 @@ import KakaoLogins from '@react-native-seoul/kakao-login';
 import { TextSize, TextWeight, Color } from '../../constants/styles';
 import { ASYNC_STORAGE_LOGIN_KEY } from '../../constants/constants';
 import CommonButton from '../../components/CommonButton';
-import { OverlayViewInterface } from './types/LoginScreen';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation, StackActions } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
-const OverlayView: React.FC<OverlayViewInterface> = ({ onPressCloseButton }) => {
+const LoginScreen: React.FC = () => {
 
-    const [ buttonHeight, setButtonHeight ] = useState(0);
     const navigation = useNavigation();
 
-    const Login = async () => {
+    const Login = useCallback(async () => {
         try {
             const LoginResult = await KakaoLogins.login();
+            // TODO. 카카오 로그인 성공 후 토큰으로 개인정보 불러온 후 백엔드 로그인 API 요청해야함
             await AsyncStorage.setItem(ASYNC_STORAGE_LOGIN_KEY, JSON.stringify(LoginResult));
             navigation.dispatch(StackActions.replace('MainScreen'));
         }
         catch (e) {
             throw new Error(e);
         }
-    };
-
-    return (
-        <View
-            style={ {
-                flex: 1,
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            } }>
-            <View
-                style={ {
-                    flex: 1,
-                } }>
-                <CommonButton
-                    icon={ require('../../resources/icons/Kakaotalk.png') }
-                    buttonTitle={ '카카오톡으로 간편 로그인' }
-                    onPressCallback={ Login }
-                    buttonColor={ Color.kakaoYellow }
-                    textColor={ Color.kakaoBrown }
-                    hasShadow={ false }
-                    onLayout={ layout => {
-                        if (!layout) return;
-                        const { height } = layout;
-                        setButtonHeight(height);
-                    } }
-                    additioinalStyle={ {
-                        marginBottom: buttonHeight + 12,
-                    } } />
-                <CommonButton
-                    icon={ require('../../resources/icons/KakaoAnother.png') }
-                    buttonTitle={ '다른 카카오계정으로 로그인' }
-                    onPressCallback={ () => {
-                        console.log('====================================');
-                        console.log('다른 카카오계정으로 로그인');
-                        console.log('====================================');
-                    } }
-                    buttonColor={ Color.kakaoYellow }
-                    textColor={ Color.kakaoBrown }
-                    hasShadow={ false } />
-            </View>
-            <TouchableOpacity
-                style={ {
-                    marginBottom: 40,
-                    alignItems: 'center',
-                } }
-                onPress={ onPressCloseButton }>
-                <Image source={ require('../../resources/icons/CloseWhite.png') } />
-            </TouchableOpacity>
-        </View>
-    );
-
-};
-
-const LoginScreen: React.FC = () => {
-
-    const [ showOverlayView, setShowOverlayView ] = useState(false);
+    }, []);
 
     return (
         <SafeAreaView
@@ -129,23 +68,13 @@ const LoginScreen: React.FC = () => {
                         fontWeight: TextWeight.bold
                     } as TextStyle }>어디서 작업할지{ '\n' }막막해?</Text>
             </View>
-            { !showOverlayView && (
-                <CommonButton
-                    icon={ require('../../resources/icons/Kakaotalk.png') }
-                    buttonTitle={ '카카오계정으로 시작하기' }
-                    onPressCallback={ () => {
-                        setShowOverlayView(true);
-                    } }
-                    buttonColor={ Color.kakaoYellow }
-                    textColor={ Color.kakaoBrown }
-                    hasShadow={ false } />
-            ) }
-            { showOverlayView && (
-                <OverlayView
-                    onPressCloseButton={ () => {
-                        setShowOverlayView(false);
-                    } } />
-            ) }
+            <CommonButton
+                icon={ require('../../resources/icons/Kakaotalk.png') }
+                buttonTitle={ '카카오계정으로 시작하기' }
+                onPressCallback={ Login }
+                buttonColor={ Color.kakaoYellow }
+                textColor={ Color.kakaoBrown }
+                hasShadow={ false } />
         </SafeAreaView>
     );
 };
