@@ -76,6 +76,12 @@ target 'relait' do
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+  
+  permission_path = '../node_modules/react-native-permissions/ios'
+  
+  pod 'Permission-LocationAlways', :path => "#{permission_path}/LocationAlways.podspec"
+  pod 'Permission-LocationWhenInUse', :path => "#{permission_path}/LocationWhenInUse.podspec"
+  pod 'Permission-Notifications', :path => "#{permission_path}/Notifications.podspec"
 
   target 'relaitTests' do
     inherit! :complete
@@ -102,3 +108,5 @@ target 'relait-tvOS' do
     # Pods for testing
   end
 end
+
+
