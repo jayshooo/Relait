@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { requestNotifications, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import { Modal, View, Text, SafeAreaView, StyleProp, TextStyle, Image } from 'react-native';
+import { Modal, View, Text, SafeAreaView, StyleProp, TextStyle, Image, Alert } from 'react-native';
 import { IRequestPermissionModal } from './types/RequestPermissionModal';
 import CommonButton from '../components/CommonButton';
 import { Color, TextWeight, TextSize } from '../constants/styles';
+import { useDispatch } from 'react-redux';
+import { showAlert } from '../store/actions/ui/action';
 
 const permissionItems = [
     {
@@ -24,6 +26,7 @@ const RequestPermissionModal: React.FC<IRequestPermissionModal> = ({ visible, on
         notification: false,
         location: false,
     });
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (permissions.notification && permissions.location) {
@@ -34,13 +37,25 @@ const RequestPermissionModal: React.FC<IRequestPermissionModal> = ({ visible, on
     const requestLocation = () => {
         request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(result => {
             if (result === RESULTS.GRANTED) {
-                onRequestClose();
                 setPermissions(prevPermissions => ({
                     ...prevPermissions,
                     location: true,
                 }));
+                onRequestClose();
             }
-            // TODO. 환경설정에서 ~~를 허용해주세요 얼럿 띄워야함
+            else {
+                dispatch(showAlert({
+                    title: '권한설정 필요',
+                    content: '환경설정에서 Relait의 위치정보 접근을 허용해주세요.',
+                    buttons: [
+                        {
+                            text: "확인",
+                            style: "default",
+                        },
+                    ],
+                    cancelable: false,
+                }));
+            }
         }).catch(e => {
             throw new Error(e);
         });
@@ -55,7 +70,19 @@ const RequestPermissionModal: React.FC<IRequestPermissionModal> = ({ visible, on
                 }));
                 requestLocation();
             }
-            // TODO. 환경설정에서 ~~를 허용해주세요 얼럿 띄워야함
+            else {
+                dispatch(showAlert({
+                    title: '권한설정 필요',
+                    content: '환경설정에서 Relait의 알림을 허용해주세요.',
+                    buttons: [
+                        {
+                            text: "확인",
+                            style: "default",
+                        },
+                    ],
+                    cancelable: false,
+                }));
+            }
         }).catch(e => {
             throw new Error(e);
         });

@@ -14,7 +14,7 @@ import { ASYNC_STORAGE_LOGIN_KEY } from '../../constants/constants';
 import CommonButton from '../../components/CommonButton';
 import { useNavigation, StackActions } from '@react-navigation/native';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const LoginScreen: React.FC = () => {
 
@@ -49,7 +49,7 @@ const LoginScreen: React.FC = () => {
                     style={ {
                         width,
                     } }
-                    resizeMode={ 'stretch' }
+                    resizeMode={ 'cover' }
                     source={ require('../../resources/images/LoginScreenImage.png') }></Image>
             </View>
             <View
@@ -57,7 +57,7 @@ const LoginScreen: React.FC = () => {
                     flex: 1,
                     alignSelf: 'stretch',
                     paddingHorizontal: 26,
-                    paddingTop: 120,
+                    paddingTop: height * .15,
                 } }>
                 <Text
                     style={ {

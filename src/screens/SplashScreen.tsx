@@ -10,8 +10,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import RNRestart from 'react-native-restart';
 import NetInfo from "@react-native-community/netinfo";
 
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store/reducers';
+import { useDispatch } from 'react-redux';
 import { showAlert } from '../store/actions/ui/action';
 import { Color } from '../constants/styles';
 import { ASYNC_STORAGE_LOGIN_KEY } from '../constants/constants';
@@ -20,7 +19,6 @@ import { ISplashScreenProps } from './types/SplashScreen';
 const SplashScreen = ({ navigation }: ISplashScreenProps) => {
 
     const dispatch = useDispatch();
-    const alertObj = useSelector((state: RootState) => state.ui.alertObj);
 
     useEffect(() => {
 
@@ -81,16 +79,6 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
         checkNetInfo();
 
     }, []);
-
-    useEffect(() => {
-
-        if (alertObj.visible) {
-            Alert.alert(alertObj.title, alertObj.content, alertObj.buttons, {
-                cancelable: alertObj.cancelable,
-            });
-        }
-
-    }, [ alertObj.visible ]);
 
     return (
         <SafeAreaView
