@@ -13,18 +13,29 @@ import { TextSize, TextWeight, Color } from '../../constants/styles';
 import { ASYNC_STORAGE_LOGIN_KEY } from '../../constants/constants';
 import CommonButton from '../../components/CommonButton';
 import { useNavigation, StackActions } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { setMyInfo } from '../../store/actions/myinfo/action';
+import { RootState } from '../../store/reducers';
 
 const { width, height } = Dimensions.get('window');
 
 const LoginScreen: React.FC = () => {
 
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const myInfo = useSelector((state: RootState) => state.myInfo);
+
+    console.log('====================================');
+    console.log(myInfo);
+    console.log('====================================');
 
     const Login = useCallback(async () => {
         try {
             const LoginResult = await KakaoLogins.login();
             // TODO. 카카오 로그인 성공 후 토큰으로 개인정보 불러온 후 백엔드 로그인 API 요청해야함
             await AsyncStorage.setItem(ASYNC_STORAGE_LOGIN_KEY, JSON.stringify(LoginResult));
+            const getProfileResult = await KakaoLogins.getProfile();
+            dispatch(setMyInfo(getProfileResult));
             navigation.dispatch(StackActions.replace('MainScreen'));
         }
         catch (e) {

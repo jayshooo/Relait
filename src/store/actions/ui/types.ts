@@ -17,8 +17,8 @@ interface ShowAlertAction {
     data: AlertContentInterface,
 }
 
-interface hideAlertAction {
+interface HideAlertAction {
     type: typeof HIDE_ALERT,
 }
 
-export type UiActionTypes = ShowAlertAction | hideAlertAction;
+export type UiActionTypes = ShowAlertAction | HideAlertAction;

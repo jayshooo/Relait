@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import {
     SafeAreaView,
     StyleSheet,
-    Alert,
     Image,
 } from 'react-native';
 import SplashScreenHelper from 'react-native-splash-screen';
@@ -10,15 +9,23 @@ import AsyncStorage from '@react-native-community/async-storage';
 import RNRestart from 'react-native-restart';
 import NetInfo from "@react-native-community/netinfo";
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { showAlert } from '../store/actions/ui/action';
 import { Color } from '../constants/styles';
 import { ASYNC_STORAGE_LOGIN_KEY } from '../constants/constants';
 import { ISplashScreenProps } from './types/SplashScreen';
+import { setMyInfo } from '../store/actions/myinfo/action';
+import KakaoLogins from '@react-native-seoul/kakao-login';
+import { RootState } from '../store/reducers';
 
 const SplashScreen = ({ navigation }: ISplashScreenProps) => {
 
     const dispatch = useDispatch();
+    const myInfo = useSelector((state: RootState) => state.myInfo);
+
+    console.log('====================================');
+    console.log(myInfo);
+    console.log('====================================');
 
     useEffect(() => {
 
@@ -47,6 +54,8 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
                         navigation.replace('LoginScreen');
                     }
                     else {
+                        const getProfileResult = await KakaoLogins.getProfile();
+                        dispatch(setMyInfo(getProfileResult));
                         // 로그인 되어있으면 메인화면으로 이동
                         navigation.replace('MainScreen');
                     }
