@@ -26,10 +26,6 @@ const LoginScreen: React.FC = () => {
     const dispatch = useDispatch();
     const myInfo = useSelector((state: RootState) => state.myInfo);
 
-    console.log('====================================');
-    console.log(myInfo);
-    console.log('====================================');
-
     const Login = useCallback(async () => {
         try {
             const LoginResult = await KakaoLogins.login();

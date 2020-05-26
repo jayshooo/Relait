@@ -17,15 +17,12 @@ import { ISplashScreenProps } from './types/SplashScreen';
 import { setMyInfo } from '../store/actions/myinfo/action';
 import KakaoLogins from '@react-native-seoul/kakao-login';
 import { RootState } from '../store/reducers';
+import { LOGIN_REQUEST } from '../store/saga/types';
 
 const SplashScreen = ({ navigation }: ISplashScreenProps) => {
 
     const dispatch = useDispatch();
     const myInfo = useSelector((state: RootState) => state.myInfo);
-
-    console.log('====================================');
-    console.log(myInfo);
-    console.log('====================================');
 
     useEffect(() => {
 
@@ -33,9 +30,9 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
             SplashScreenHelper.hide();
         }, 2000);
 
-        const getIsLogin = async (): Promise<boolean> => {
+        const hasLoginToken = async (): Promise<boolean> => {
             // for test
-            await AsyncStorage.removeItem(ASYNC_STORAGE_LOGIN_KEY);
+            // await AsyncStorage.removeItem(ASYNC_STORAGE_LOGIN_KEY);
             const result = await AsyncStorage.getItem(ASYNC_STORAGE_LOGIN_KEY);
             return !!result;
         };
@@ -48,15 +45,19 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
                 const { isConnected } = netInfoResult;
 
                 if (isConnected) {
-                    const isLogin = await getIsLogin();
+                    const isLogin = await hasLoginToken();
                     if (!isLogin) {
-                        // 로그인 되어있지 않으면 로그인 화면으로 이동
+                        // 로그인 토큰이 없으면 로그인 화면으로 이동
                         navigation.replace('LoginScreen');
                     }
                     else {
+                        // 로그인 토큰이 존재하면 프로필 정보 요청 후 로그인 요청
                         const getProfileResult = await KakaoLogins.getProfile();
                         dispatch(setMyInfo(getProfileResult));
-                        // 로그인 되어있으면 메인화면으로 이동
+                        dispatch({
+                            type: LOGIN_REQUEST,
+                            data: getProfileResult.id,
+                        });
                         navigation.replace('MainScreen');
                     }
                 }

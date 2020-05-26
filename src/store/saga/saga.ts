@@ -13,11 +13,13 @@ const fetchLogin = function* (action: SagaActionTypes) {
         yield call(loginAPI, action.data);
         yield put({
             type: LOGIN_SUCCESS,
+            data: true,
         });
     }
     catch (e) {
         yield put({
             type: LOGIN_FAILED,
+            data: false,
         });
         throw new Error(e);
     }
