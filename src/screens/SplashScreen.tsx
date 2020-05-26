@@ -30,7 +30,7 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
             SplashScreenHelper.hide();
         }, 2000);
 
-        const hasLoginToken = async (): Promise<boolean> => {
+        const getHasLoginToken = async (): Promise<boolean> => {
             // for test
             // await AsyncStorage.removeItem(ASYNC_STORAGE_LOGIN_KEY);
             const result = await AsyncStorage.getItem(ASYNC_STORAGE_LOGIN_KEY);
@@ -45,8 +45,8 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
                 const { isConnected } = netInfoResult;
 
                 if (isConnected) {
-                    const isLogin = await hasLoginToken();
-                    if (!isLogin) {
+                    const hasLoginToken = await getHasLoginToken();
+                    if (!hasLoginToken) {
                         // 로그인 토큰이 없으면 로그인 화면으로 이동
                         navigation.replace('LoginScreen');
                     }
