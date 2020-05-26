@@ -35,7 +35,7 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
 
         const getIsLogin = async (): Promise<boolean> => {
             // for test
-            // await AsyncStorage.removeItem(ASYNC_STORAGE_LOGIN_KEY);
+            await AsyncStorage.removeItem(ASYNC_STORAGE_LOGIN_KEY);
             const result = await AsyncStorage.getItem(ASYNC_STORAGE_LOGIN_KEY);
             return !!result;
         };
