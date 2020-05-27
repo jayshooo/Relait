@@ -33,8 +33,13 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
         const getHasLoginToken = async (): Promise<boolean> => {
             // for test
             // await AsyncStorage.removeItem(ASYNC_STORAGE_LOGIN_KEY);
-            const result = await AsyncStorage.getItem(ASYNC_STORAGE_LOGIN_KEY);
-            return !!result;
+            try {
+                const result = await AsyncStorage.getItem(ASYNC_STORAGE_LOGIN_KEY);
+                return !!result;
+            }
+            catch (e) {
+                throw new Error(e);
+            }
         };
 
         const checkNetInfo = async () => {
