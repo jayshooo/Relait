@@ -1,5 +1,6 @@
 import axios from 'axios';
+import { BASE_URL } from './constants';
 
 export const httpClient = axios.create({
-    baseURL: 'http://15.165.216.17:9000',
+    baseURL: BASE_URL,
 });
