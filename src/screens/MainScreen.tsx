@@ -6,8 +6,9 @@ import { TextSize, TextWeight, Color } from '../constants/styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BottomSlideBar } from '../components/BottomSlideBar';
 import { WriteButton } from '../components/WriteButton';
+import { StatusBarHeight } from '../utils/Helpers';
 
-const bottomHeight = 65;
+const bottomHeight = 53;
 
 const MapView = () => {
     return (
@@ -96,7 +97,7 @@ const MainScreen = () => {
         return (
             <View
                 style={ {
-                    paddingTop: 20,
+                    paddingTop: 38 + StatusBarHeight,
                     paddingBottom: 24,
                     paddingHorizontal: 24,
                 } }>
@@ -144,8 +145,11 @@ const MainScreen = () => {
     };
 
     return (
-        <SafeAreaView
-            style={ { flex: 1, backgroundColor: Color.white } }>
+        <View
+            style={ {
+                flex: 1,
+                backgroundColor: Color.white,
+            } }>
             <View
                 style={ {
                     flex: 1,
@@ -164,7 +168,7 @@ const MainScreen = () => {
             <BottomSlideBar
                 bottomHeight={ bottomHeight }
                 setShowHeader={ setShowHeader } />
-        </SafeAreaView>
+        </View>
     );
 };
 

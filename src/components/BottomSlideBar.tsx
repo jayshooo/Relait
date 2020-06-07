@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Color } from '../constants/styles';
+import { Color, TextSize } from '../constants/styles';
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import { ITouchupBar, IBottmoSlideBar } from './types/BottomSlideBar';
+import { isIphoneX } from '../utils/Helpers';
 
 const { height } = Dimensions.get('window');
 
@@ -30,12 +31,13 @@ const TouchupBar: FC<ITouchupBar> = ({ showText = true, onPress }) => {
                     backgroundColor: Color.black,
                     opacity: .2,
                     borderRadius: 2.5,
-                    marginBottom: 8,
                 } }></View>
             { showText && (
                 <Text
                     style={ {
+                        marginTop: 8,
                         color: Color.darkTwo,
+                        fontSize: TextSize.h4,
                     } }>전체보기</Text>
             ) }
         </TouchableOpacity>
@@ -45,6 +47,7 @@ const TouchupBar: FC<ITouchupBar> = ({ showText = true, onPress }) => {
 export const BottomSlideBar: FC<IBottmoSlideBar> = ({ bottomHeight, setShowHeader }) => {
 
     const [ isExpand, setIsExpand ] = useState(false);
+    const _bottomHeight = isIphoneX ? bottomHeight + 34 : bottomHeight;
 
     return (
         <SlidingUpPanel
@@ -55,14 +58,14 @@ export const BottomSlideBar: FC<IBottmoSlideBar> = ({ bottomHeight, setShowHeade
             friction={ 0.5 }
             backdropOpacity={ 0 }
             onDragStart={ (e) => {
-                const isStartFromBottom = e === bottomHeight;
+                const isStartFromBottom = e === _bottomHeight;
                 setShowHeader(!isStartFromBottom);
             } }
             onBottomReached={ () => {
                 setIsExpand(false);
             } }
-            snappingPoints={ [ height - 44, bottomHeight ] }
-            draggableRange={ { top: height - 44, bottom: bottomHeight } }>
+            snappingPoints={ [ height - 44, _bottomHeight ] }
+            draggableRange={ { top: height - 44, bottom: _bottomHeight } }>
             <View
                 style={ {
                     flex: 1,
