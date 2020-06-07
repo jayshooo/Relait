@@ -8,7 +8,6 @@ import { ITouchupBar, IBottmoSlideBar } from './types/BottomSlideBar';
 const { height } = Dimensions.get('window');
 
 let panel: SlidingUpPanel | null = null;
-const bottomPosition = 65;
 
 const TouchupBar: FC<ITouchupBar> = ({ showText = true, onPress }) => {
 
@@ -43,7 +42,7 @@ const TouchupBar: FC<ITouchupBar> = ({ showText = true, onPress }) => {
     );
 };
 
-export const BottomSlideBar: FC<IBottmoSlideBar> = ({ setShowHeader }) => {
+export const BottomSlideBar: FC<IBottmoSlideBar> = ({ bottomHeight, setShowHeader }) => {
 
     const [ isExpand, setIsExpand ] = useState(false);
 
@@ -56,14 +55,14 @@ export const BottomSlideBar: FC<IBottmoSlideBar> = ({ setShowHeader }) => {
             friction={ 0.5 }
             backdropOpacity={ 0 }
             onDragStart={ (e) => {
-                const isStartFromBottom = e === bottomPosition;
+                const isStartFromBottom = e === bottomHeight;
                 setShowHeader(!isStartFromBottom);
             } }
             onBottomReached={ () => {
                 setIsExpand(false);
             } }
-            snappingPoints={ [ height - 44, bottomPosition ] }
-            draggableRange={ { top: height - 44, bottom: bottomPosition } }>
+            snappingPoints={ [ height - 44, bottomHeight ] }
+            draggableRange={ { top: height - 44, bottom: bottomHeight } }>
             <View
                 style={ {
                     flex: 1,

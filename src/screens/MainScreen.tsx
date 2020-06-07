@@ -5,6 +5,9 @@ import RequestPermissionModal from '../modals/RequestPermissionModal';
 import { TextSize, TextWeight, Color } from '../constants/styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BottomSlideBar } from '../components/BottomSlideBar';
+import { WriteButton } from '../components/WriteButton';
+
+const bottomHeight = 65;
 
 const MapView = () => {
     return (
@@ -85,6 +88,10 @@ const MainScreen = () => {
         console.log('예약현황 스크린으로 이동');
     };
 
+    const onPressWriteButton = () => {
+        console.log('작성하기');
+    };
+
     const HeaderView = () => {
         return (
             <View
@@ -138,13 +145,16 @@ const MainScreen = () => {
 
     return (
         <SafeAreaView
-            style={ { flex: 1, } }>
+            style={ { flex: 1, backgroundColor: Color.white } }>
             <View
                 style={ {
                     flex: 1,
                 } }>
                 { showHeader && HeaderView() }
                 <MapView />
+                <WriteButton
+                    bottomHeight={ bottomHeight }
+                    onPressWriteButton={ onPressWriteButton } />
                 <RequestPermissionModal
                     visible={ showRequestPermissionModal }
                     onRequestClose={ () => {
@@ -152,6 +162,7 @@ const MainScreen = () => {
                     } } />
             </View>
             <BottomSlideBar
+                bottomHeight={ bottomHeight }
                 setShowHeader={ setShowHeader } />
         </SafeAreaView>
     );

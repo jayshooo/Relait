@@ -1,4 +1,4 @@
-import SlidingUpPanel, { SlidingUpPanelAnimationConfig } from 'rn-sliding-up-panel';
+import { SlidingUpPanelAnimationConfig } from 'rn-sliding-up-panel';
 
 export interface ITouchupBar {
     showText?: boolean;
@@ -6,5 +6,6 @@ export interface ITouchupBar {
 }
 
 export interface IBottmoSlideBar {
+    bottomHeight: number;
     setShowHeader: (status: boolean) => void;
 }
