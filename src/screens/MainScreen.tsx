@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, Text, View, StyleProp, TextStyle, Image } from 'react-native';
 import { checkNotifications, check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import RequestPermissionModal from '../modals/RequestPermissionModal';
+import { TextSize, TextWeight, Color } from '../constants/styles';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { BottomSlideBar } from '../components/BottomSlideBar';
+
+const MapView = () => {
+    return (
+        <View
+            style={ {
+                flex: 1,
+                backgroundColor: Color.kakaoYellow,
+                justifyContent: 'center',
+                alignItems: 'center',
+            } }>
+            <Text>맵뷰영역</Text>
+        </View>
+    );
+};
 
 const MainScreen = () => {
 
     const [ hasPermission, setHasPermission ] = useState(true);
     const [ showRequestPermissionModal, setShowRequestPermissionModal ] = useState(false);
+    const [ showHeader, setShowHeader ] = useState(true);
 
     useEffect(() => {
 
@@ -59,22 +77,82 @@ const MainScreen = () => {
 
     }, []);
 
+    const findMyLocation = () => {
+        console.log('내 위치 찾기');
+    };
+
+    const goToReservationScreen = () => {
+        console.log('예약현황 스크린으로 이동');
+    };
+
+    const HeaderView = () => {
+        return (
+            <View
+                style={ {
+                    paddingTop: 20,
+                    paddingBottom: 24,
+                    paddingHorizontal: 24,
+                } }>
+                <View
+                    style={ {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-end',
+                    } }>
+                    <Text
+                        style={ {
+                            fontSize: TextSize.h5,
+                            color: Color.gray2,
+                        } as StyleProp<TextStyle> }>현재 위치</Text>
+                    <TouchableOpacity
+                        onPress={ goToReservationScreen }>
+                        <Image source={ require('../resources/icons/BookingIcon.png') } />
+                    </TouchableOpacity>
+                </View>
+                <View
+                    style={ {
+                        marginTop: 4,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    } }>
+                    <Text
+                        style={ {
+                            fontSize: TextSize.h2,
+                            fontWeight: TextWeight.bold,
+                        } as StyleProp<TextStyle> }>서울특별시 마포구 연남동</Text>
+                    <TouchableOpacity
+                        style={ {
+                            marginLeft: 8,
+                            borderWidth: 1,
+                            borderRadius: 50,
+                            borderColor: Color.gray2,
+                            padding: 4,
+                        } }
+                        onPress={ findMyLocation }>
+                        <Image source={ require('../resources/icons/Location.png') } />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        );
+    };
+
     return (
         <SafeAreaView
             style={ { flex: 1, } }>
             <View
                 style={ {
                     flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
                 } }>
-                <Text>나는야 메인 스크린 ^오^</Text>
+                { showHeader && HeaderView() }
+                <MapView />
                 <RequestPermissionModal
                     visible={ showRequestPermissionModal }
                     onRequestClose={ () => {
                         setHasPermission(true);
                     } } />
             </View>
+            <BottomSlideBar
+                setShowHeader={ setShowHeader } />
         </SafeAreaView>
     );
 };
