@@ -68,7 +68,7 @@ export const BottomSlideBar: FC<IBottmoSlideBar> = ({ bottomHeight, setShowHeade
                     flex: 1,
                     alignItems: 'center',
                     justifyContent: 'flex-start',
-                    backgroundColor: Color.gray2,
+                    backgroundColor: Color.white,
                     borderTopLeftRadius: 16,
                     borderTopRightRadius: 16,
                 } }>
