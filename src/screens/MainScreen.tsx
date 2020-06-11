@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Text, View, StyleProp, TextStyle, Image } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import { checkNotifications, check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import RequestPermissionModal from '../modals/RequestPermissionModal';
-import { TextSize, TextWeight, Color } from '../constants/styles';
+import { TextSize, Color, FontWeight } from '../constants/styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BottomSlideBar } from '../components/BottomSlideBar';
 import { WriteButton } from '../components/WriteButton';
@@ -111,7 +111,7 @@ const MainScreen = () => {
                         style={ {
                             fontSize: TextSize.h5,
                             color: Color.gray2,
-                        } as StyleProp<TextStyle> }>현재 위치</Text>
+                        } }>현재 위치</Text>
                     <TouchableOpacity
                         onPress={ goToReservationScreen }>
                         <Image source={ require('../resources/icons/BookingIcon.png') } />
@@ -126,8 +126,8 @@ const MainScreen = () => {
                     <Text
                         style={ {
                             fontSize: TextSize.h2,
-                            fontWeight: TextWeight.bold,
-                        } as StyleProp<TextStyle> }>서울특별시 마포구 연남동</Text>
+                            fontWeight: FontWeight.bold,
+                        } }>서울특별시 마포구 연남동</Text>
                     <TouchableOpacity
                         style={ {
                             marginLeft: 8,

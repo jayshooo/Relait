@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { requestNotifications, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import { Modal, View, Text, SafeAreaView, StyleProp, TextStyle, Image, Alert } from 'react-native';
+import { Modal, View, Text, SafeAreaView, Image } from 'react-native';
 import { IRequestPermissionModal } from './types/RequestPermissionModal';
 import CommonButton from '../components/CommonButton';
-import { Color, TextWeight, TextSize } from '../constants/styles';
+import { Color, TextWeight, TextSize, FontWeight } from '../constants/styles';
 import { useDispatch } from 'react-redux';
 import { showAlert } from '../store/actions/ui/action';
 
@@ -109,8 +109,8 @@ const RequestPermissionModal: React.FC<IRequestPermissionModal> = ({ visible, on
                         <Text
                             style={ {
                                 fontSize: TextSize.h1,
-                                fontWeight: TextWeight.bold,
-                            } as StyleProp<TextStyle> }>더이상 자리찾아{ '\n' }헤매지 말자.</Text>
+                                fontWeight: FontWeight.bold,
+                            } }>더이상 자리찾아{ '\n' }헤매지 말자.</Text>
                     </View>
                     <View
                         style={ {

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useCallback } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Color, TextSize } from '../constants/styles';
@@ -49,9 +49,17 @@ export const BottomSlideBar: FC<IBottmoSlideBar> = ({ bottomHeight, setShowHeade
     const [ isExpand, setIsExpand ] = useState(false);
     const _bottomHeight = isIphoneX ? bottomHeight + 34 : bottomHeight;
 
+    const onPress = useCallback(() => {
+        isExpand ? panel?.hide() : panel?.show();
+        setIsExpand(prevExpand => {
+            setShowHeader(prevExpand);
+            return !prevExpand;
+        });
+    }, [ isExpand, panel ]);
+
     return (
         <SlidingUpPanel
-            ref={ _panel => {
+            ref={ (_panel: SlidingUpPanel) => {
                 if (!_panel) return;
                 panel = _panel;
             } }
@@ -77,13 +85,7 @@ export const BottomSlideBar: FC<IBottmoSlideBar> = ({ bottomHeight, setShowHeade
                 } }>
                 <TouchupBar
                     showText={ !isExpand }
-                    onPress={ () => {
-                        isExpand ? panel?.hide() : panel?.show();
-                        setIsExpand(prevExpand => {
-                            setShowHeader(prevExpand);
-                            return !prevExpand;
-                        });
-                    } } />
+                    onPress={ onPress } />
                 { isExpand && (
                     <Text>자리 리스트</Text>
                 ) }

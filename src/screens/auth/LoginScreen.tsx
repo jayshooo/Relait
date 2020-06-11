@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import KakaoLogins from '@react-native-seoul/kakao-login';
-import { TextSize, TextWeight, Color } from '../../constants/styles';
+import { TextSize, Color, FontWeight } from '../../constants/styles';
 import { ASYNC_STORAGE_LOGIN_KEY } from '../../constants/constants';
 import CommonButton from '../../components/CommonButton';
 import { useNavigation, StackActions } from '@react-navigation/native';
@@ -78,7 +78,7 @@ const LoginScreen: React.FC = () => {
                 <Text
                     style={ {
                         fontSize: TextSize.h1,
-                        fontWeight: TextWeight.bold
+                        fontWeight: FontWeight.bold
                     } as TextStyle }>어디서 작업할지{ '\n' }막막해?</Text>
             </View>
             <CommonButton
