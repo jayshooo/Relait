@@ -3,8 +3,11 @@ export const Color = {
     kakaoYellow: '#ffe600',
     kakaoBrown: '#3d1e1f',
     gray: '#d4d9df',
+    gray2: '#a2aab3',
     darkGray: '#505b69',
+    darkTwo: '#1c222b',
     white: '#ffffff',
+    black: '#000000',
 };
 
 export const TextSize = {
@@ -17,7 +20,13 @@ export const TextSize = {
 };
 
 export const TextWeight = {
-    bold: 'bold',
-    regular: 'normal',
+    bold: '700',
+    regular: '500',
     thin: '200',
 };
+
+export enum FontWeight {
+    bold = 'bold',
+    normal = 'normal',
+    thin = '200',
+}
