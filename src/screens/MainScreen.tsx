@@ -7,6 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BottomSlideBar } from '../components/BottomSlideBar';
 import { WriteButton } from '../components/WriteButton';
 import { StatusBarHeight } from '../utils/Helpers';
+import { IHeaderView } from './types/MainScreen';
 
 const bottomHeight = 53;
 
@@ -20,6 +21,57 @@ const MapView = () => {
                 alignItems: 'center',
             } }>
             <Text>맵뷰영역</Text>
+        </View>
+    );
+};
+
+const HeaderView = ({ goToReservationScreen, findMyLocation }: IHeaderView) => {
+    return (
+        <View
+            style={ {
+                paddingTop: 38 + StatusBarHeight,
+                paddingBottom: 24,
+                paddingHorizontal: 24,
+            } }>
+            <View
+                style={ {
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end',
+                } }>
+                <Text
+                    style={ {
+                        fontSize: TextSize.h5,
+                        color: Color.gray2,
+                    } }>현재 위치</Text>
+                <TouchableOpacity
+                    onPress={ goToReservationScreen }>
+                    <Image source={ require('../resources/icons/BookingIcon.png') } />
+                </TouchableOpacity>
+            </View>
+            <View
+                style={ {
+                    marginTop: 4,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                } }>
+                <Text
+                    style={ {
+                        fontSize: TextSize.h2,
+                        fontWeight: FontWeight.bold,
+                    } }>서울특별시 마포구 연남동</Text>
+                <TouchableOpacity
+                    style={ {
+                        marginLeft: 8,
+                        borderWidth: 1,
+                        borderRadius: 50,
+                        borderColor: Color.gray2,
+                        padding: 4,
+                    } }
+                    onPress={ findMyLocation }>
+                    <Image source={ require('../resources/icons/Location.png') } />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
@@ -93,57 +145,6 @@ const MainScreen = () => {
         console.log('작성하기');
     };
 
-    const HeaderView = () => {
-        return (
-            <View
-                style={ {
-                    paddingTop: 38 + StatusBarHeight,
-                    paddingBottom: 24,
-                    paddingHorizontal: 24,
-                } }>
-                <View
-                    style={ {
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'flex-end',
-                    } }>
-                    <Text
-                        style={ {
-                            fontSize: TextSize.h5,
-                            color: Color.gray2,
-                        } }>현재 위치</Text>
-                    <TouchableOpacity
-                        onPress={ goToReservationScreen }>
-                        <Image source={ require('../resources/icons/BookingIcon.png') } />
-                    </TouchableOpacity>
-                </View>
-                <View
-                    style={ {
-                        marginTop: 4,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    } }>
-                    <Text
-                        style={ {
-                            fontSize: TextSize.h2,
-                            fontWeight: FontWeight.bold,
-                        } }>서울특별시 마포구 연남동</Text>
-                    <TouchableOpacity
-                        style={ {
-                            marginLeft: 8,
-                            borderWidth: 1,
-                            borderRadius: 50,
-                            borderColor: Color.gray2,
-                            padding: 4,
-                        } }
-                        onPress={ findMyLocation }>
-                        <Image source={ require('../resources/icons/Location.png') } />
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-    };
-
     return (
         <View
             style={ {
@@ -154,7 +155,11 @@ const MainScreen = () => {
                 style={ {
                     flex: 1,
                 } }>
-                { showHeader && HeaderView() }
+                { showHeader && (
+                    <HeaderView
+                        goToReservationScreen={ goToReservationScreen }
+                        findMyLocation={ findMyLocation } />
+                ) }
                 <MapView />
                 <WriteButton
                     bottomHeight={ bottomHeight }
