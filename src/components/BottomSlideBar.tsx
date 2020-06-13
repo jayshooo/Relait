@@ -1,5 +1,5 @@
-import React, { FC, useState, useCallback } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import React, { FC, useState, useCallback, useEffect } from 'react';
+import { View, Text, Dimensions, Animated } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Color, TextSize } from '../constants/styles';
 import SlidingUpPanel from 'rn-sliding-up-panel';
@@ -48,14 +48,37 @@ export const BottomSlideBar: FC<IBottmoSlideBar> = ({ bottomHeight, setShowHeade
 
     const [ isExpand, setIsExpand ] = useState(false);
     const _bottomHeight = isIphoneX ? bottomHeight + 34 : bottomHeight;
+    const [ animatedValue, setAnimatedValue ] = useState(new Animated.Value(0));
+
+    useEffect(() => {
+        setAnimatedValue(new Animated.Value(_bottomHeight));
+    }, [ _bottomHeight ]);
+
+    useEffect(() => {
+        setShowHeader(!isExpand);
+    }, [ isExpand ]);
 
     const onPress = useCallback(() => {
         isExpand ? panel?.hide() : panel?.show();
-        setIsExpand(prevExpand => {
-            setShowHeader(prevExpand);
-            return !prevExpand;
-        });
     }, [ isExpand, panel ]);
+
+    const draggableRange = { top: height - 44, bottom: _bottomHeight };
+
+    const _onAnimatedValueChange = useCallback(({ value }: { value: number; }) => {
+
+        const { top, bottom } = draggableRange;
+
+        if (value === bottom) {
+            setIsExpand(false);
+        }
+
+        if (value === top) {
+            setIsExpand(true);
+        }
+
+    }, []);
+
+    animatedValue.addListener(_onAnimatedValueChange);
 
     return (
         <SlidingUpPanel
@@ -63,15 +86,9 @@ export const BottomSlideBar: FC<IBottmoSlideBar> = ({ bottomHeight, setShowHeade
                 if (!_panel) return;
                 panel = _panel;
             } }
+            animatedValue={ animatedValue }
             friction={ 0.5 }
             backdropOpacity={ 0 }
-            onDragStart={ (e) => {
-                const isStartFromBottom = e === _bottomHeight;
-                setShowHeader(!isStartFromBottom);
-            } }
-            onBottomReached={ () => {
-                setIsExpand(false);
-            } }
             snappingPoints={ [ height - 44, _bottomHeight ] }
             draggableRange={ { top: height - 44, bottom: _bottomHeight } }>
             <View
