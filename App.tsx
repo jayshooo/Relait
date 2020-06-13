@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, StatusBar, Appearance } from 'react-native';
 import AppNavigation from './src/navigation/Navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from './src/store/reducers';
@@ -20,9 +20,13 @@ const App = () => {
 
     }, [ alertObj.visible ]);
 
+    const isDarkMode = Appearance.getColorScheme() === 'dark';
+
     return (
         <View
             style={ { flex: 1 } }>
+            <StatusBar
+                barStyle={ isDarkMode ? 'light-content' : 'dark-content' } />
             <AppNavigation />
         </View>
     );
