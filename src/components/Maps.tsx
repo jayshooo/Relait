@@ -36,11 +36,13 @@ export const MapContainer: React.FC<IMapContainer> = ({ coordination }) => {
 
         const { latitude, longitude } = coordination;
         if (!mapRef) return;
+
         mapRef.current!.animateCamera({
             center: {
                 latitude,
                 longitude,
             },
+            zoom: 17,
         }, {
             duration: 200,
         });
@@ -56,12 +58,6 @@ export const MapContainer: React.FC<IMapContainer> = ({ coordination }) => {
             provider={ PROVIDER_GOOGLE }
             style={ {
                 flex: 1,
-            } }
-            initialRegion={ {
-                latitude,
-                longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
             } }>
             <MapMarker
                 mapReady={ mapReady }
