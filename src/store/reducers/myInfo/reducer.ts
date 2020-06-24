@@ -1,5 +1,6 @@
 import { MyInfoInitialState } from './types';
-import { MyInfoActionTypes } from '../../actions/myinfo/types';
+import { MyInfoActionTypes, SET_MY_INFO } from '../../actions/myinfo/types';
+import { LOGIN_SUCCESS, LOGIN_FAILED } from '../../saga/types';
 
 const initialState = {
     myInfo: null,
@@ -8,13 +9,13 @@ const initialState = {
 
 const myInfo = (state: MyInfoInitialState = initialState, action: MyInfoActionTypes) => {
     switch (action.type) {
-        case 'SET_MY_INFO':
+        case SET_MY_INFO:
             return {
                 ...state,
                 myInfo: action.data,
             };
-        case 'LOGIN_SUCCESS':
-        case 'LOGIN_FAILED':
+        case LOGIN_SUCCESS:
+        case LOGIN_FAILED:
             return {
                 ...state,
                 isLogin: action.data,
