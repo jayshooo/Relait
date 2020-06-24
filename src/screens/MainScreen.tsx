@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, Image } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Text, View, Image, InteractionManager } from 'react-native';
 import { checkNotifications, check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import RequestPermissionModal from '../modals/RequestPermissionModal';
 import { TextSize, Color, FontWeight } from '../constants/styles';
@@ -9,6 +9,7 @@ import { WriteButton } from '../components/WriteButton';
 import { StatusBarHeight } from '../utils/Helpers';
 import { MapContainer } from '../components/Maps';
 import { IHeaderView } from './types/MainScreen';
+import { useFocusEffect } from '@react-navigation/native';
 
 const bottomHeight = 53;
 
@@ -68,6 +69,17 @@ const MainScreen = () => {
     const [ hasPermission, setHasPermission ] = useState(true);
     const [ showRequestPermissionModal, setShowRequestPermissionModal ] = useState(false);
     const [ showHeader, setShowHeader ] = useState(true);
+    const [ showMap, setShowMap ] = useState(false);
+
+    useFocusEffect(
+        useCallback(() => {
+            const task = InteractionManager.runAfterInteractions(() => {
+                setShowMap(true);
+            });
+
+            return () => task.cancel();
+        }, [])
+    );
 
     useEffect(() => {
 
@@ -147,7 +159,9 @@ const MainScreen = () => {
                         goToReservationScreen={ goToReservationScreen }
                         findMyLocation={ findMyLocation } />
                 ) }
-                <MapContainer />
+                { showMap && (
+                    <MapContainer />
+                ) }
                 <WriteButton
                     bottomHeight={ bottomHeight }
                     onPressWriteButton={ onPressWriteButton } />
