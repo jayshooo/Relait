@@ -1,9 +1,11 @@
 export interface IMapContainer {
-    onTransitionEnd?: boolean;
+    coordination: any;
 }
 
 export interface IMapMarker {
     lat: number;
     lng: number;
     title?: string;
+    mapReady: boolean;
+    onPressMarker: () => void;
 }

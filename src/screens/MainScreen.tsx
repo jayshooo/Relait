@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Text, View, Image, InteractionManager } from 'react-native';
 import { checkNotifications, check, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { useFocusEffect } from '@react-navigation/native';
+import Geolocation from 'react-native-geolocation-service';
+
 import RequestPermissionModal from '../modals/RequestPermissionModal';
 import { TextSize, Color, FontWeight } from '../constants/styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -9,7 +12,6 @@ import { WriteButton } from '../components/WriteButton';
 import { StatusBarHeight } from '../utils/Helpers';
 import { MapContainer } from '../components/Maps';
 import { IHeaderView } from './types/MainScreen';
-import { useFocusEffect } from '@react-navigation/native';
 
 const bottomHeight = 53;
 
@@ -70,6 +72,7 @@ const MainScreen = () => {
     const [ showRequestPermissionModal, setShowRequestPermissionModal ] = useState(false);
     const [ showHeader, setShowHeader ] = useState(true);
     const [ showMap, setShowMap ] = useState(false);
+    const [ coordination, setCoordination ] = useState<any>(null);
 
     useFocusEffect(
         useCallback(() => {
@@ -95,6 +98,7 @@ const MainScreen = () => {
             if (result !== RESULTS.GRANTED) {
                 return false;
             }
+
             return true;
         }
         catch (e) {
@@ -130,6 +134,17 @@ const MainScreen = () => {
 
         checkPermissions();
 
+        Geolocation.getCurrentPosition(info => {
+            const { coords } = info;
+            setCoordination(coords);
+        }, error => {
+            // TODO. 에러 핸들러 추가
+        }, {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 1000,
+        });
+
     }, []);
 
     const findMyLocation = () => {
@@ -160,7 +175,8 @@ const MainScreen = () => {
                         findMyLocation={ findMyLocation } />
                 ) }
                 { showMap && (
-                    <MapContainer />
+                    <MapContainer
+                        coordination={ coordination } />
                 ) }
                 <WriteButton
                     bottomHeight={ bottomHeight }
