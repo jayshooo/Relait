@@ -7,23 +7,10 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BottomSlideBar } from '../components/BottomSlideBar';
 import { WriteButton } from '../components/WriteButton';
 import { StatusBarHeight } from '../utils/Helpers';
+import { MapContainer } from '../components/Maps';
 import { IHeaderView } from './types/MainScreen';
 
 const bottomHeight = 53;
-
-const MapView = () => {
-    return (
-        <View
-            style={ {
-                flex: 1,
-                backgroundColor: Color.kakaoYellow,
-                justifyContent: 'center',
-                alignItems: 'center',
-            } }>
-            <Text>맵뷰영역</Text>
-        </View>
-    );
-};
 
 const HeaderView = ({ goToReservationScreen, findMyLocation }: IHeaderView) => {
     return (
@@ -160,7 +147,7 @@ const MainScreen = () => {
                         goToReservationScreen={ goToReservationScreen }
                         findMyLocation={ findMyLocation } />
                 ) }
-                <MapView />
+                <MapContainer />
                 <WriteButton
                     bottomHeight={ bottomHeight }
                     onPressWriteButton={ onPressWriteButton } />
