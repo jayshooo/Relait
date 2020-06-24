@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { IMapMarker, IMapContainer } from './types/Maps';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
@@ -30,8 +30,26 @@ export const MapContainer: React.FC<IMapContainer> = ({ coordination }) => {
         console.log('====================================');
     };
 
+    const mapRef = useRef<MapView | null>(null);
+
+    useEffect(() => {
+
+        const { latitude, longitude } = coordination;
+        if (!mapRef) return;
+        mapRef.current!.animateCamera({
+            center: {
+                latitude,
+                longitude,
+            },
+        }, {
+            duration: 200,
+        });
+
+    }, [ coordination ]);
+
     return (
         <MapView
+            ref={ mapRef }
             onMapReady={ () => {
                 setTimeout(() => setMapReady(true), 100);
             } }

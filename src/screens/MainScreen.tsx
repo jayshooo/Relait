@@ -12,6 +12,7 @@ import { WriteButton } from '../components/WriteButton';
 import { StatusBarHeight } from '../utils/Helpers';
 import { MapContainer } from '../components/Maps';
 import { IHeaderView } from './types/MainScreen';
+import animateCamera from 'react-native-maps';
 
 const bottomHeight = 53;
 
@@ -133,7 +134,11 @@ const MainScreen = () => {
     useEffect(() => {
 
         checkPermissions();
+        findMyLocation();
 
+    }, []);
+
+    const findMyLocation = () => {
         Geolocation.getCurrentPosition(info => {
             const { coords } = info;
             setCoordination(coords);
@@ -144,11 +149,6 @@ const MainScreen = () => {
             timeout: 5000,
             maximumAge: 1000,
         });
-
-    }, []);
-
-    const findMyLocation = () => {
-        console.log('내 위치 찾기');
     };
 
     const goToReservationScreen = () => {
