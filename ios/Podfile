@@ -82,6 +82,11 @@ target 'relait' do
   pod 'Permission-LocationAlways', :path => "#{permission_path}/LocationAlways.podspec"
   pod 'Permission-LocationWhenInUse', :path => "#{permission_path}/LocationWhenInUse.podspec"
   pod 'Permission-Notifications', :path => "#{permission_path}/Notifications.podspec"
+  
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
+  pod 'GoogleMaps'
+  pod 'Google-Maps-iOS-Utils'
 
 
   target 'relaitTests' do

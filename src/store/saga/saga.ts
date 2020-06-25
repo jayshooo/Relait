@@ -11,6 +11,7 @@ const loginAPI = (uniqueId: string) => {
 const fetchLogin = function* (action: SagaActionTypes) {
     try {
         yield call(loginAPI, action.data);
+
         yield put({
             type: LOGIN_SUCCESS,
             data: true,
@@ -21,7 +22,6 @@ const fetchLogin = function* (action: SagaActionTypes) {
             type: LOGIN_FAILED,
             data: false,
         });
-        throw new Error(e);
     }
 };
 

@@ -1,29 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, Image } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Text, View, Image, InteractionManager } from 'react-native';
 import { checkNotifications, check, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { useFocusEffect } from '@react-navigation/native';
+import Geolocation from 'react-native-geolocation-service';
+
 import RequestPermissionModal from '../modals/RequestPermissionModal';
 import { TextSize, Color, FontWeight } from '../constants/styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BottomSlideBar } from '../components/BottomSlideBar';
 import { WriteButton } from '../components/WriteButton';
 import { StatusBarHeight } from '../utils/Helpers';
+import { MapContainer } from '../components/Maps';
 import { IHeaderView } from './types/MainScreen';
+import animateCamera from 'react-native-maps';
 
 const bottomHeight = 53;
-
-const MapView = () => {
-    return (
-        <View
-            style={ {
-                flex: 1,
-                backgroundColor: Color.kakaoYellow,
-                justifyContent: 'center',
-                alignItems: 'center',
-            } }>
-            <Text>맵뷰영역</Text>
-        </View>
-    );
-};
 
 const HeaderView = ({ goToReservationScreen, findMyLocation }: IHeaderView) => {
     return (
@@ -81,6 +72,18 @@ const MainScreen = () => {
     const [ hasPermission, setHasPermission ] = useState(true);
     const [ showRequestPermissionModal, setShowRequestPermissionModal ] = useState(false);
     const [ showHeader, setShowHeader ] = useState(true);
+    const [ showMap, setShowMap ] = useState(false);
+    const [ coordination, setCoordination ] = useState<any>(null);
+
+    useFocusEffect(
+        useCallback(() => {
+            const task = InteractionManager.runAfterInteractions(() => {
+                setShowMap(true);
+            });
+
+            return () => task.cancel();
+        }, [])
+    );
 
     useEffect(() => {
 
@@ -96,6 +99,7 @@ const MainScreen = () => {
             if (result !== RESULTS.GRANTED) {
                 return false;
             }
+
             return true;
         }
         catch (e) {
@@ -130,11 +134,21 @@ const MainScreen = () => {
     useEffect(() => {
 
         checkPermissions();
+        findMyLocation();
 
     }, []);
 
     const findMyLocation = () => {
-        console.log('내 위치 찾기');
+        Geolocation.getCurrentPosition(info => {
+            const { coords } = info;
+            setCoordination(coords);
+        }, error => {
+            // TODO. 에러 핸들러 추가
+        }, {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 1000,
+        });
     };
 
     const goToReservationScreen = () => {
@@ -160,7 +174,10 @@ const MainScreen = () => {
                         goToReservationScreen={ goToReservationScreen }
                         findMyLocation={ findMyLocation } />
                 ) }
-                <MapView />
+                { showMap && (
+                    <MapContainer
+                        coordination={ coordination } />
+                ) }
                 <WriteButton
                     bottomHeight={ bottomHeight }
                     onPressWriteButton={ onPressWriteButton } />
