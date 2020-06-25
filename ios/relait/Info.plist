@@ -29,7 +29,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao80b620c7af6cbb32762ee7233aff6121</string>
+				<string>$(KAKAO_URL_SCHEMES)</string>
 			</array>
 		</dict>
 	</array>
@@ -62,23 +62,23 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-  <key>KAKAO_APP_KEY</key>
-  <string>80b620c7af6cbb32762ee7233aff6121</string>
-  <key>LSApplicationQueriesSchemes</key>
-  <array>
-    <string>kakao80b620c7af6cbb32762ee7233aff6121</string>
-    <string>kakaokompassauth</string>
-    <string>storykompassauth</string>
-    <string>kakaolink</string>
-    <string>kakaotalk-4.5.0</string>
-    <string>kakaostory-2.9.0</string>
-    <string>storylink</string>
-  </array>
-  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-  <string>앱을 사용하는 동안 / 항상</string>
-  <key>NSLocationAlwaysUsageDescription</key>
-  <string>항상</string>
-  <key>NSLocationWhenInUseUsageDescription</key>
-  <string>내 주변의 이용 가능한 카페 정보를 표시하기 위해 위치정보가 필요합니다.</string>
+	<key>KAKAO_APP_KEY</key>
+	<string>$(KAKAO_API_KEY)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>$(KAKAO_URL_SCHEMES)</string>
+		<string>kakaokompassauth</string>
+		<string>storykompassauth</string>
+		<string>kakaolink</string>
+		<string>kakaotalk-4.5.0</string>
+		<string>kakaostory-2.9.0</string>
+		<string>storylink</string>
+	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>앱을 사용하는 동안 / 항상</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>항상</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>내 주변의 이용 가능한 카페 정보를 표시하기 위해 위치정보가 필요합니다.</string>
 </dict>
 </plist>

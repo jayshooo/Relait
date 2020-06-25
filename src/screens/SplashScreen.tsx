@@ -30,7 +30,7 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
 
         const getHasLoginToken = async (): Promise<boolean> => {
             // for test
-            // await AsyncStorage.removeItem(ASYNC_STORAGE_LOGIN_KEY);
+            await AsyncStorage.removeItem(ASYNC_STORAGE_LOGIN_KEY);
             try {
                 const result = await AsyncStorage.getItem(ASYNC_STORAGE_LOGIN_KEY);
                 return !!result;
