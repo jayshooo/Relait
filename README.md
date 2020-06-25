@@ -11,5 +11,5 @@
 5. iOS 의존성 패키지를 설치한다. (로컬)
     > cd ios && pod install
 6. xCode 를 실행한 후 Preferences => Location 탭에서 `Command Line Tools` 드롭다운 리스트에서 가장 최신 버전을 선택한다.
-6. 실행한다. 
+7. 실행한다. 
     > Relait > npm run ios
