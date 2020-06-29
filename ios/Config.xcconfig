@@ -1,0 +1,11 @@
+//
+//  Config.xcconfig
+//  relait
+//
+//  Created by Alan on 25/06/2020.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include? "tmp.xcconfig"
