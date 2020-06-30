@@ -1,6 +1,6 @@
 import { httpClient } from '../constants/api';
 import Config from 'react-native-config';
-import { ILocation, TGetReverseGeocoding } from './types';
+import { TGetReverseGeocoding } from './types';
 
 export const getReverseGeocoding: TGetReverseGeocoding = async ({ lat = 0, lng = 0 }): Promise<string> => {
 
