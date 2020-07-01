@@ -5,6 +5,7 @@ import { Color, TextSize } from '../constants/styles';
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import { ITouchupBar, IBottmoSlideBar } from './types/BottomSlideBar';
 import { isIphoneX } from '../utils/Helpers';
+import { ListComponent } from './ListComponent';
 
 const { height } = Dimensions.get('window');
 
@@ -99,12 +100,13 @@ export const BottomSlideBar: FC<IBottmoSlideBar> = ({ bottomHeight, setShowHeade
                     backgroundColor: Color.white,
                     borderTopLeftRadius: 16,
                     borderTopRightRadius: 16,
+                    paddingHorizontal: 24,
                 } }>
                 <TouchupBar
                     showText={ !isExpand }
                     onPress={ onPress } />
                 { isExpand && (
-                    <Text>자리 리스트</Text>
+                    <ListComponent />
                 ) }
             </View>
         </SlidingUpPanel>

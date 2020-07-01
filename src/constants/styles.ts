@@ -3,11 +3,12 @@ export const Color = {
     kakaoYellow: '#ffe600',
     kakaoBrown: '#3d1e1f',
     gray: '#d4d9df',
-    gray2: '#a2aab3',
+    grayTwo: '#a2aab3',
     darkGray: '#505b69',
     darkTwo: '#1c222b',
     white: '#ffffff',
     black: '#000000',
+    deepOrange: '#ef4b0e',
 };
 
 export const TextSize = {

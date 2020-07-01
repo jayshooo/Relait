@@ -35,7 +35,7 @@ const HeaderView = ({ currentAddress, goToReservationScreen, findMyLocation }: I
                 <Text
                     style={ {
                         fontSize: TextSize.h5,
-                        color: Color.gray2,
+                        color: Color.grayTwo,
                     } }>현재 위치</Text>
                 <TouchableOpacity
                     onPress={ goToReservationScreen }>
@@ -58,7 +58,7 @@ const HeaderView = ({ currentAddress, goToReservationScreen, findMyLocation }: I
                         marginLeft: 8,
                         borderWidth: 1,
                         borderRadius: 50,
-                        borderColor: Color.gray2,
+                        borderColor: Color.grayTwo,
                         padding: 4,
                     } }
                     onPress={ findMyLocation }>

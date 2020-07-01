@@ -8,7 +8,7 @@ export const getReverseGeocoding: TGetReverseGeocoding = async ({ lat = 0, lng =
         const response = await httpClient().get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lng}&y=${lat}`, {
             headers: {
                 Authorization: `KakaoAK ${Config.KAKAO_REST_API_KEY}`,
-            }
+            },
         });
 
         const { status, data } = response;
