@@ -1,4 +1,4 @@
-import { MyInfoInitialState } from './types';
+import { IMyInfoInitialState } from './types';
 import { MyInfoActionTypes, SET_MY_INFO } from '../../actions/myinfo/types';
 import { LOGIN_SUCCESS, LOGIN_FAILED } from '../../saga/types';
 
@@ -7,7 +7,7 @@ const initialState = {
     isLogin: false,
 };
 
-const myInfo = (state: MyInfoInitialState = initialState, action: MyInfoActionTypes) => {
+const myInfo = (state: IMyInfoInitialState = initialState, action: MyInfoActionTypes) => {
     switch (action.type) {
         case SET_MY_INFO:
             return {
