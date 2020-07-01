@@ -12,11 +12,13 @@ import { WriteButton } from '../components/WriteButton';
 import { StatusBarHeight } from '../utils/Helpers';
 import { MapContainer } from '../components/Maps';
 import { IHeaderView } from './types/MainScreen';
-import animateCamera from 'react-native-maps';
+import { getReverseGeocoding } from '../helpers/Geocoding';
+import { ILocation } from '../helpers/types';
 
 const bottomHeight = 53;
 
-const HeaderView = ({ goToReservationScreen, findMyLocation }: IHeaderView) => {
+const HeaderView = ({ currentAddress, goToReservationScreen, findMyLocation }: IHeaderView) => {
+
     return (
         <View
             style={ {
@@ -50,7 +52,7 @@ const HeaderView = ({ goToReservationScreen, findMyLocation }: IHeaderView) => {
                     style={ {
                         fontSize: TextSize.h2,
                         fontWeight: FontWeight.bold,
-                    } }>서울특별시 마포구 연남동</Text>
+                    } }>{ currentAddress }</Text>
                 <TouchableOpacity
                     style={ {
                         marginLeft: 8,
@@ -131,6 +133,26 @@ const MainScreen = () => {
         }
     };
 
+    const [ currentAddress, setCurrentAddress ] = useState('');
+
+    const _getReverseGeocoding = async (coords: ILocation) => {
+        const address = await getReverseGeocoding(coords);
+        setCurrentAddress(address);
+    };
+
+    useEffect(() => {
+
+        if (!coordination) return;
+
+        const { latitude, longitude } = coordination;
+
+        _getReverseGeocoding({
+            lat: latitude,
+            lng: longitude,
+        });
+
+    }, [ coordination ]);
+
     useEffect(() => {
 
         checkPermissions();
@@ -171,6 +193,7 @@ const MainScreen = () => {
                 } }>
                 { showHeader && (
                     <HeaderView
+                        currentAddress={ currentAddress }
                         goToReservationScreen={ goToReservationScreen }
                         findMyLocation={ findMyLocation } />
                 ) }

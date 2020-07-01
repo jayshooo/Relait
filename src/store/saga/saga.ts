@@ -1,14 +1,14 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { LOGIN_SUCCESS, LOGIN_REQUEST, LOGIN_FAILED, SagaActionTypes } from './types';
+import { LOGIN_SUCCESS, LOGIN_REQUEST, LOGIN_FAILED, LoginSagaAction } from './types';
 import { httpClient } from '../../constants/api';
 
 const loginAPI = (uniqueId: string) => {
-    return httpClient.post('/user/login', {
+    return httpClient().post('/user/login', {
         uniqueId,
     });
 };
 
-const fetchLogin = function* (action: SagaActionTypes) {
+const fetchLogin = function* (action: LoginSagaAction) {
     try {
         yield call(loginAPI, action.data);
 
