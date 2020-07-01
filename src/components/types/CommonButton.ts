@@ -1,4 +1,5 @@
 import { StyleProp, ViewStyle, LayoutRectangle } from 'react-native';
+import { FontWeight } from '../../constants/styles';
 
 export interface ICommonButton {
     onLayout?: (nativeEvent: LayoutRectangle) => void;
@@ -8,6 +9,6 @@ export interface ICommonButton {
     onPressCallback: Function;
     buttonColor: string;
     textColor: string;
-    textWeight?: string;
+    fontWeight?: FontWeight;
     additioinalStyle?: StyleProp<ViewStyle> | null;
 }

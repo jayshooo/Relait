@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View, Text, Image } from 'react-native';
-import { TextSize, Color, TextWeight } from '../constants/styles';
+import { TextSize, Color, FontWeight } from '../constants/styles';
 import { IPlugView } from './types/ListComponent';
 
 const PlugView: FC<IPlugView> = ({ hasPlug = false }) => {
@@ -49,7 +49,7 @@ export const ListComponent = () => {
                     <Text
                         style={ {
                             fontSize: TextSize.h3,
-                            fontWeight: TextWeight.bold,
+                            fontWeight: FontWeight.bold,
                         } }>18:00 ~</Text>
                     <Text
                         style={ {

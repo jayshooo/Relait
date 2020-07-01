@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Image, TouchableHighlight, Text, StyleProp, ViewStyle } from 'react-native';
-import { TextSize, TextWeight, FontWeight } from '../constants/styles';
+import { TextSize, FontWeight } from '../constants/styles';
 import { ICommonButton } from './types/CommonButton';
 
-const CommonButton = ({ onLayout, icon, buttonTitle, onPressCallback, buttonColor, textColor, textWeight = TextWeight.regular, hasShadow = true, additioinalStyle = null }: ICommonButton) => {
+const CommonButton = ({ onLayout, icon, buttonTitle, onPressCallback, buttonColor, textColor, fontWeight = FontWeight.normal, hasShadow = true, additioinalStyle = null }: ICommonButton) => {
 
     const hasIcon = !!icon;
     const shadowStyle: StyleProp<ViewStyle> = {
@@ -62,7 +62,7 @@ const CommonButton = ({ onLayout, icon, buttonTitle, onPressCallback, buttonColo
                     style={ {
                         alignSelf: 'center',
                         fontSize: TextSize.h4,
-                        fontWeight: FontWeight.normal,
+                        fontWeight,
                         color: textColor,
                     } }>{ buttonTitle }</Text>
             </View>

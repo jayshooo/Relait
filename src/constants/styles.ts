@@ -20,12 +20,6 @@ export const TextSize = {
     extra: 10,
 };
 
-export const TextWeight = {
-    bold: '700',
-    regular: '500',
-    thin: '200',
-};
-
 export enum FontWeight {
     bold = 'bold',
     normal = 'normal',

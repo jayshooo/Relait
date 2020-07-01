@@ -3,7 +3,7 @@ import { requestNotifications, request, PERMISSIONS, RESULTS } from 'react-nativ
 import { Modal, View, Text, SafeAreaView, Image } from 'react-native';
 import { IRequestPermissionModal } from './types/RequestPermissionModal';
 import CommonButton from '../components/CommonButton';
-import { Color, TextWeight, TextSize, FontWeight } from '../constants/styles';
+import { Color, TextSize, FontWeight } from '../constants/styles';
 import { useDispatch } from 'react-redux';
 import { showAlert } from '../store/actions/ui/action';
 
@@ -156,7 +156,7 @@ const RequestPermissionModal: React.FC<IRequestPermissionModal> = ({ visible, on
                     requestNotificationPermission();
                 } }
                 textColor={ Color.white }
-                textWeight={ TextWeight.bold }
+                fontWeight={ FontWeight.bold }
                 buttonColor={ Color.purplishBlue } />
         </Modal>
     );
