@@ -3,7 +3,7 @@ import { ISeatsInitialState } from '../../reducers/seats/types';
 
 interface GetSeatsAction {
     type: typeof GET_SEATS_REQUEST | typeof GET_SEATS_SUCCESS | typeof GET_SEATS_FAILED;
-    data: ISeatsInitialState[ 'seats' ];
+    seats: ISeatsInitialState[ 'seats' ];
 }
 
 export type SeatsActionTypes = GetSeatsAction;

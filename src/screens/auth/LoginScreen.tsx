@@ -13,9 +13,8 @@ import { TextSize, Color, FontWeight } from '../../constants/styles';
 import { ASYNC_STORAGE_LOGIN_KEY } from '../../constants/constants';
 import CommonButton from '../../components/CommonButton';
 import { useNavigation, StackActions } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setMyInfo } from '../../store/actions/myinfo/action';
-import { RootState } from '../../store/reducers';
 import { LOGIN_REQUEST } from '../../store/saga/types';
 
 const { width, height } = Dimensions.get('window');
@@ -24,7 +23,6 @@ const LoginScreen: React.FC = () => {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const myInfo = useSelector((state: RootState) => state.myInfo);
 
     const Login = useCallback(async () => {
         try {

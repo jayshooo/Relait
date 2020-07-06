@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { IMapMarker, IMapContainer } from './types/Maps';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/reducers';
 
 export const MapMarker = ({ lat, lng, title, mapReady, onPressMarker }: IMapMarker) => {
     return (
@@ -17,12 +19,13 @@ export const MapMarker = ({ lat, lng, title, mapReady, onPressMarker }: IMapMark
     );
 };
 
-export const MapContainer: React.FC<IMapContainer> = ({ coordination }) => {
+export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
 
-    if (!coordination) return null;
+    if (!myCoordination) return null;
 
-    const { latitude, longitude } = coordination;
+    const { latitude, longitude } = myCoordination;
     const [ mapReady, setMapReady ] = useState(false);
+    const seats = useSelector((state: RootState) => state.seats.seats);
 
     const onPressMarker = () => {
         console.log('====================================');
@@ -34,7 +37,7 @@ export const MapContainer: React.FC<IMapContainer> = ({ coordination }) => {
 
     useEffect(() => {
 
-        const { latitude, longitude } = coordination;
+        const { latitude, longitude } = myCoordination;
         if (!mapRef) return;
 
         mapRef.current!.animateCamera({
@@ -47,7 +50,7 @@ export const MapContainer: React.FC<IMapContainer> = ({ coordination }) => {
             duration: 200,
         });
 
-    }, [ coordination ]);
+    }, [ myCoordination ]);
 
     return (
         <MapView

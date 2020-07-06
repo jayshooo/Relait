@@ -11,7 +11,7 @@ const seats = (state: ISeatsInitialState = initialState, action: SeatsActionType
         case GET_SEATS_SUCCESS:
             return {
                 ...state,
-                seats: action.data,
+                seats: action.seats,
             };
         default: return state;
     }

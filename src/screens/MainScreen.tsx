@@ -14,6 +14,8 @@ import { MapContainer } from '../components/Maps';
 import { IHeaderView } from './types/MainScreen';
 import { getReverseGeocoding } from '../helpers/Geocoding';
 import { ILocation } from '../helpers/types';
+import { useDispatch } from 'react-redux';
+import { GET_SEATS_REQUEST, GET_SEATS_SUCCESS } from '../store/saga/types';
 
 const bottomHeight = 53;
 
@@ -75,7 +77,7 @@ const MainScreen = () => {
     const [ showRequestPermissionModal, setShowRequestPermissionModal ] = useState(false);
     const [ showHeader, setShowHeader ] = useState(true);
     const [ showMap, setShowMap ] = useState(false);
-    const [ coordination, setCoordination ] = useState<any>(null);
+    const [ myCoordination, setMyCoordination ] = useState<any>(null);
 
     useFocusEffect(
         useCallback(() => {
@@ -140,30 +142,38 @@ const MainScreen = () => {
         setCurrentAddress(address);
     };
 
+    const dispatch = useDispatch();
+    const getSeats = () => {
+        dispatch({
+            type: GET_SEATS_REQUEST,
+        });
+    };
+
     useEffect(() => {
 
-        if (!coordination) return;
+        if (!myCoordination) return;
 
-        const { latitude, longitude } = coordination;
+        const { latitude, longitude } = myCoordination;
 
         _getReverseGeocoding({
             lat: latitude,
             lng: longitude,
         });
 
-    }, [ coordination ]);
+    }, [ myCoordination ]);
 
     useEffect(() => {
 
         checkPermissions();
         findMyLocation();
+        getSeats();
 
     }, []);
 
     const findMyLocation = () => {
         Geolocation.getCurrentPosition(info => {
             const { coords } = info;
-            setCoordination(coords);
+            setMyCoordination(coords);
         }, error => {
             // TODO. 에러 핸들러 추가
         }, {
@@ -199,7 +209,7 @@ const MainScreen = () => {
                 ) }
                 { showMap && (
                     <MapContainer
-                        coordination={ coordination } />
+                        myCoordination={ myCoordination } />
                 ) }
                 <WriteButton
                     bottomHeight={ bottomHeight }

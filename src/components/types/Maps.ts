@@ -1,5 +1,13 @@
 export interface IMapContainer {
-    coordination: any;
+    myCoordination: {
+        accuracy: number;
+        altitude: number;
+        altitudeAccuracy: number;
+        heading: number;
+        latitude: number;
+        longitude: number;
+        speed: number;
+    };
 }
 
 export interface IMapMarker {
