@@ -5,6 +5,7 @@ import { LOGIN_SUCCESS, LOGIN_FAILED } from '../../saga/types';
 const initialState = {
     myInfo: null,
     isLogin: false,
+    token: null,
 };
 
 const myInfo = (state: IMyInfoInitialState = initialState, action: MyInfoActionTypes) => {
@@ -18,7 +19,8 @@ const myInfo = (state: IMyInfoInitialState = initialState, action: MyInfoActionT
         case LOGIN_FAILED:
             return {
                 ...state,
-                isLogin: action.data,
+                token: action.token,
+                isLogin: action.isLogin,
             };
         default: return state;
     }

@@ -14,17 +14,20 @@ const getSeatsAPI = () => {
 
 const fetchLogin = function* (action: LoginSagaAction) {
     try {
-        yield call(loginAPI, action.data);
+        const response = yield call(loginAPI, action.data);
+        const { data } = response;
 
         yield put({
             type: LOGIN_SUCCESS,
-            data: true,
+            token: `Bearer ${data.token}`,
+            isLogin: true,
         });
     }
     catch (e) {
         yield put({
             type: LOGIN_FAILED,
-            data: false,
+            token: null,
+            isLogin: false,
         });
     }
 };

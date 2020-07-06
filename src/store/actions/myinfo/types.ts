@@ -10,7 +10,8 @@ interface SetMyInfoAction {
 
 interface SetIsLoginAction {
     type: typeof LOGIN_REQUEST | typeof LOGIN_SUCCESS | typeof LOGIN_FAILED;
-    data: IMyInfoInitialState[ 'isLogin' ];
+    isLogin: IMyInfoInitialState[ 'isLogin' ];
+    token: IMyInfoInitialState[ 'token' ];
 }
 
 export type MyInfoActionTypes = SetMyInfoAction | SetIsLoginAction;
