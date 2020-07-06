@@ -4,7 +4,10 @@ import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/reducers';
 
-export const MapMarker = ({ lat, lng, title, mapReady, onPressMarker }: IMapMarker) => {
+export const MapMarker = ({ lat, lng, title, mapReady, onPressMarker, isMyLocation = false }: IMapMarker) => {
+
+    const icon = isMyLocation ? require('../resources/icons/MyLocationMarker.png') : require('../resources/icons/Marker.png');
+
     return (
         <Marker
             title={ title }
@@ -12,8 +15,8 @@ export const MapMarker = ({ lat, lng, title, mapReady, onPressMarker }: IMapMark
                 latitude: lat,
                 longitude: lng,
             } }
-            image={ require('../resources/icons/Marker.png') }
-            icon={ require('../resources/icons/Marker.png') }
+            image={ icon }
+            icon={ icon }
             onPress={ onPressMarker }
             tracksViewChanges={ !mapReady } />
     );
@@ -62,11 +65,14 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
             style={ {
                 flex: 1,
             } }>
-            <MapMarker
-                mapReady={ mapReady }
-                lat={ latitude }
-                lng={ longitude }
-                onPressMarker={ onPressMarker } />
+            { !!myCoordination && (
+                <MapMarker
+                    mapReady={ mapReady }
+                    lat={ latitude }
+                    lng={ longitude }
+                    onPressMarker={ onPressMarker }
+                    isMyLocation={ true } />
+            ) }
         </MapView>
     );
 };
