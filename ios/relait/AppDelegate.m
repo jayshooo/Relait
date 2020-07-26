@@ -5,6 +5,8 @@
 #import <React/RCTRootView.h>
 #import "RNSplashScreen.h"
 #import <KakaoOpenSDK/KakaoOpenSDK.h>
+#import <GoogleMaps/GoogleMaps.h>
+#import "ReactNativeConfig.h"
 
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
@@ -13,9 +15,6 @@
 #import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
-#import <GoogleMaps/GoogleMaps.h>
-
-#import "ReactNativeConfig.h"
 
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
