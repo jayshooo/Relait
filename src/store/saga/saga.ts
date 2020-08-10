@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { LOGIN_SUCCESS, LOGIN_REQUEST, LOGIN_FAILED, GET_SEATS_REQUEST, LoginSagaAction, GET_SEATS_SUCCESS } from './types';
+import { LOGIN_SUCCESS, LOGIN_REQUEST, LOGIN_FAILED, GET_SEATS_REQUEST, LoginSagaAction, GET_SEATS_SUCCESS, GET_SEATS_FAILED } from './types';
 import { httpClient } from '../../constants/api';
 
 const loginAPI = (uniqueId: string) => {
@@ -44,7 +44,10 @@ const getSeats = function* () {
 
     }
     catch (e) {
-
+        yield put({
+            type: GET_SEATS_FAILED,
+            seats: null,
+        });
     }
 };
 
