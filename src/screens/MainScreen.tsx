@@ -14,8 +14,9 @@ import { MapContainer } from '../components/Maps';
 import { IHeaderView } from './types/MainScreen';
 import { getReverseGeocoding } from '../helpers/Geocoding';
 import { ILocation } from '../helpers/types';
-import { useDispatch } from 'react-redux';
-import { GET_SEATS_REQUEST, GET_SEATS_SUCCESS } from '../store/saga/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { GET_SEATS_REQUEST } from '../store/saga/types';
+import { RootState } from '../store/reducers';
 
 const bottomHeight = 53;
 
@@ -78,6 +79,7 @@ const MainScreen = () => {
     const [ showHeader, setShowHeader ] = useState(true);
     const [ showMap, setShowMap ] = useState(false);
     const [ myCoordination, setMyCoordination ] = useState<any>(null);
+    const getSeatsError = useSelector((state: RootState) => state.seats.seats === null);
 
     useFocusEffect(
         useCallback(() => {
@@ -207,7 +209,7 @@ const MainScreen = () => {
                         goToReservationScreen={ goToReservationScreen }
                         findMyLocation={ findMyLocation } />
                 ) }
-                { showMap && (
+                { showMap && !getSeatsError && (
                     <MapContainer
                         myCoordination={ myCoordination } />
                 ) }
