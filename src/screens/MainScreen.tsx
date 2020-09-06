@@ -179,7 +179,7 @@ const MainScreen = () => {
         }, error => {
             // TODO. 에러 핸들러 추가
         }, {
-            enableHighAccuracy: true,
+            enableHighAccuracy: false,
             timeout: 5000,
             maximumAge: 1000,
         });
