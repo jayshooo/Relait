@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "ios": "sh ./iOS.sh",
-        "ios-6s-serve": "tsc && npm run reset-metro && react-native run-ios --simulator 'iPhone 6s'",
+        "ios-min-serve": "tsc && npm run reset-metro && react-native run-ios --simulator 'iPhone 8'",
         "ios-max-serve": "tsc && npm run reset-metro && react-native run-ios --simulator 'iPhone 11 Pro Max'",
         "start": "react-native start",
         "reset-metro": "rm -rf $TMPDIR/metro-* && watchman watch-del-all",

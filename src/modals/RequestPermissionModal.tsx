@@ -15,7 +15,7 @@ const permissionItems = [
     },
     {
         title: '위치',
-        icon: require('../resources/icons/Location.png'),
+        icon: require('../resources/icons/MarkerBlack.png'),
         purpose: '내 주변 이용 가능한 카페 정보 표시',
     },
 ];
