@@ -15,8 +15,8 @@ import { IHeaderView } from './types/MainScreen';
 import { getReverseGeocoding } from '../helpers/Geocoding';
 import { ILocation } from '../helpers/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { GET_SEATS_REQUEST } from '../store/saga/types';
 import { RootState } from '../store/reducers';
+import { getSeats } from '../store/actions/seats/action';
 
 const bottomHeight = 53;
 
@@ -145,10 +145,9 @@ const MainScreen = () => {
     };
 
     const dispatch = useDispatch();
-    const getSeats = () => {
-        dispatch({
-            type: GET_SEATS_REQUEST,
-        });
+    const _getSeats = async () => {
+        const getSeatsResult = await dispatch(getSeats());
+        // TODO. 시트정보 렌더링 해야함.
     };
 
     useEffect(() => {
@@ -168,7 +167,7 @@ const MainScreen = () => {
 
         checkPermissions();
         findMyLocation();
-        getSeats();
+        _getSeats();
 
     }, []);
 

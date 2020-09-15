@@ -1,14 +1,11 @@
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createLogger } from 'redux-logger';
-
-import createSagaMiddleware from 'redux-saga';
+import thunk from 'redux-thunk';
 import { rootReducer } from './reducers';
-import watcher from './saga/saga';
 
-const sagaMiddleware = createSagaMiddleware();
 const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__ });
-let middlewares: any = [ sagaMiddleware ];
+let middlewares: any = [ thunk ];
 
 if (__DEV__) {
     middlewares = [
@@ -23,7 +20,5 @@ const store = createStore(
         applyMiddleware(...middlewares),
     )
 );
-
-sagaMiddleware.run(watcher);
 
 export default store;

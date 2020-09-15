@@ -1,6 +1,5 @@
 import { ISeatsInitialState } from './types';
-import { SeatsActionTypes } from '../../actions/seats/types';
-import { GET_SEATS_SUCCESS, GET_SEATS_FAILED } from '../../saga/types';
+import { SeatsActionTypes, GET_SEATS_SUCCESS, GET_SEATS_FAILED } from '../../actions/seats/types';
 
 const initialState = {
     seats: [],

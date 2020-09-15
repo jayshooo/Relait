@@ -1,7 +1,10 @@
 import { IMyInfoInitialState } from '../../reducers/myInfo/types';
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILED } from '../../saga/types';
 
 export const SET_MY_INFO = 'SET_MY_INFO';
+
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILED = 'LOGIN_FAILED';
 
 interface SetMyInfoAction {
     type: typeof SET_MY_INFO;

@@ -1,6 +1,5 @@
 import { IMyInfoInitialState } from './types';
-import { MyInfoActionTypes, SET_MY_INFO } from '../../actions/myinfo/types';
-import { LOGIN_SUCCESS, LOGIN_FAILED } from '../../saga/types';
+import { MyInfoActionTypes, SET_MY_INFO, LOGIN_SUCCESS, LOGIN_FAILED } from '../../actions/myinfo/types';
 
 const initialState = {
     myInfo: null,

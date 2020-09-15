@@ -14,9 +14,8 @@ import { showAlert } from '../store/actions/ui/action';
 import { Color } from '../constants/styles';
 import { ASYNC_STORAGE_LOGIN_KEY } from '../constants/constants';
 import { ISplashScreenProps } from './types/SplashScreen';
-import { setMyInfo } from '../store/actions/myinfo/action';
+import { setMyInfo, doLogin } from '../store/actions/myinfo/action';
 import KakaoLogins from '@react-native-seoul/kakao-login';
-import { LOGIN_REQUEST } from '../store/saga/types';
 
 const SplashScreen = ({ navigation }: ISplashScreenProps) => {
 
@@ -57,10 +56,7 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
                         // 로그인 토큰이 존재하면 프로필 정보 요청 후 로그인 요청
                         const getProfileResult = await KakaoLogins.getProfile();
                         dispatch(setMyInfo(getProfileResult));
-                        dispatch({
-                            type: LOGIN_REQUEST,
-                            data: getProfileResult.id,
-                        });
+                        dispatch(doLogin(getProfileResult.id));
                         navigation.replace('MainScreen');
                     }
                 }

@@ -14,8 +14,7 @@ import { ASYNC_STORAGE_LOGIN_KEY } from '../../constants/constants';
 import CommonButton from '../../components/CommonButton';
 import { useNavigation, StackActions } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { setMyInfo } from '../../store/actions/myinfo/action';
-import { LOGIN_REQUEST } from '../../store/saga/types';
+import { setMyInfo, doLogin } from '../../store/actions/myinfo/action';
 
 const { width, height } = Dimensions.get('window');
 
@@ -31,10 +30,7 @@ const LoginScreen: React.FC = () => {
             await AsyncStorage.setItem(ASYNC_STORAGE_LOGIN_KEY, JSON.stringify(LoginResult));
             const getProfileResult = await KakaoLogins.getProfile();
             dispatch(setMyInfo(getProfileResult));
-            dispatch({
-                type: LOGIN_REQUEST,
-                data: getProfileResult.id,
-            });
+            dispatch(doLogin(getProfileResult.id));
             navigation.dispatch(StackActions.replace('MainScreen'));
         }
         catch (e) {
