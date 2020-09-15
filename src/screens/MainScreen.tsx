@@ -177,7 +177,8 @@ const MainScreen = () => {
             const { coords } = info;
             setMyCoordination(coords);
         }, error => {
-            // TODO. 에러 핸들러 추가
+            if (!error || Object.keys(error).length === 0) return;
+            // TODO. 에러핸들링코드 추가
         }, {
             enableHighAccuracy: false,
             timeout: 5000,
