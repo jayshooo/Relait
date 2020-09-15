@@ -79,17 +79,6 @@ const MainScreen = () => {
     const [ showHeader, setShowHeader ] = useState(true);
     const [ showMap, setShowMap ] = useState(false);
     const [ myCoordination, setMyCoordination ] = useState<any>(null);
-    const getSeatsError = useSelector((state: RootState) => state.seats.seats === null);
-
-    useFocusEffect(
-        useCallback(() => {
-            const task = InteractionManager.runAfterInteractions(() => {
-                setShowMap(true);
-            });
-
-            return () => task.cancel();
-        }, [])
-    );
 
     useEffect(() => {
 
@@ -209,10 +198,8 @@ const MainScreen = () => {
                         goToReservationScreen={ goToReservationScreen }
                         findMyLocation={ findMyLocation } />
                 ) }
-                { showMap && !getSeatsError && (
-                    <MapContainer
-                        myCoordination={ myCoordination } />
-                ) }
+                <MapContainer
+                    myCoordination={ myCoordination } />
                 <WriteButton
                     bottomHeight={ bottomHeight }
                     onPressWriteButton={ onPressWriteButton } />

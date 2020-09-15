@@ -6,8 +6,6 @@ import { RootState } from '../store/reducers';
 
 export const MapMarker = ({ lat, lng, title, mapReady, onPressMarker, isMyLocation = false }: IMapMarker) => {
 
-    const icon = isMyLocation ? require('../resources/icons/MyLocationMarker.png') : require('../resources/icons/Marker.png');
-
     return (
         <Marker
             title={ title }
@@ -15,10 +13,9 @@ export const MapMarker = ({ lat, lng, title, mapReady, onPressMarker, isMyLocati
                 latitude: lat,
                 longitude: lng,
             } }
-            image={ icon }
-            icon={ icon }
+            image={ isMyLocation ? require('../resources/icons/MyLocationMarker.png') : require('../resources/icons/Marker.png') }
             onPress={ onPressMarker }
-            tracksViewChanges={ !mapReady } />
+            tracksViewChanges={ true } />
     );
 };
 
@@ -40,8 +37,11 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
 
     useEffect(() => {
 
+        if (!mapRef || !myCoordination) return;
+
         const { latitude, longitude } = myCoordination;
-        if (!mapRef) return;
+
+        setMapReady(true);
 
         mapRef.current!.animateCamera({
             center: {
@@ -59,20 +59,20 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
         <MapView
             ref={ mapRef }
             onMapReady={ () => {
-                setTimeout(() => setMapReady(true), 100);
+                setTimeout(() => {
+                    setMapReady(true);
+                }, 200);
             } }
             provider={ PROVIDER_GOOGLE }
             style={ {
                 flex: 1,
             } }>
-            { !!myCoordination && (
-                <MapMarker
-                    mapReady={ mapReady }
-                    lat={ latitude }
-                    lng={ longitude }
-                    onPressMarker={ onPressMarker }
-                    isMyLocation={ true } />
-            ) }
+            <MapMarker
+                mapReady={ mapReady }
+                lat={ latitude }
+                lng={ longitude }
+                onPressMarker={ onPressMarker }
+                isMyLocation={ true } />
         </MapView>
     );
 };
