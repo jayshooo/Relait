@@ -4,7 +4,7 @@ import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/reducers';
 
-export const MapMarker = ({ lat, lng, title, mapReady, onPressMarker, isMyLocation = false }: IMapMarker) => {
+export const MapMarker = ({ lat, lng, title, onPressMarker, isMyLocation = false }: IMapMarker) => {
 
     return (
         <Marker
@@ -24,7 +24,6 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
     if (!myCoordination) return null;
 
     const { latitude, longitude } = myCoordination;
-    const [ mapReady, setMapReady ] = useState(false);
     const seats = useSelector((state: RootState) => state.seats.seats);
 
     const onPressMarker = () => {
@@ -41,7 +40,7 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
 
         const { latitude, longitude } = myCoordination;
 
-        setMapReady(true);
+        // setMapReady(true);
 
         mapRef.current!.animateCamera({
             center: {
@@ -58,17 +57,11 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
     return (
         <MapView
             ref={ mapRef }
-            onMapReady={ () => {
-                setTimeout(() => {
-                    setMapReady(true);
-                }, 200);
-            } }
             provider={ PROVIDER_GOOGLE }
             style={ {
                 flex: 1,
             } }>
             <MapMarker
-                mapReady={ mapReady }
                 lat={ latitude }
                 lng={ longitude }
                 onPressMarker={ onPressMarker }

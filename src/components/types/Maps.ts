@@ -13,7 +13,6 @@ export interface IMapContainer {
 export interface IMapMarker {
     lat: number;
     lng: number;
-    mapReady: boolean;
     onPressMarker: () => void;
     title?: string;
     isMyLocation?: boolean;
