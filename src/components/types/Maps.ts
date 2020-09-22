@@ -1,3 +1,5 @@
+import { ISeat } from '../../store/reducers/seats/types';
+
 export interface IMapContainer {
     myCoordination: {
         accuracy: number;
@@ -13,7 +15,6 @@ export interface IMapContainer {
 export interface IMapMarker {
     lat: number;
     lng: number;
-    onPressMarker: () => void;
-    title?: string;
+    onPressMarker?: () => void;
     isMyLocation?: boolean;
 }

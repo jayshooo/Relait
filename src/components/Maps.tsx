@@ -3,18 +3,21 @@ import { IMapMarker, IMapContainer } from './types/Maps';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/reducers';
+import { ISeat } from '../store/reducers/seats/types';
 
-export const MapMarker = ({ lat, lng, title, onPressMarker, isMyLocation = false }: IMapMarker) => {
+export const MapMarker = ({ lat, lng, onPressMarker, isMyLocation = false }: IMapMarker) => {
 
     return (
         <Marker
-            title={ title }
             coordinate={ {
                 latitude: lat,
                 longitude: lng,
             } }
             image={ isMyLocation ? require('../resources/icons/MyLocationMarker.png') : require('../resources/icons/Marker.png') }
-            onPress={ onPressMarker }
+            onPress={ () => {
+                if (!onPressMarker) return;
+                onPressMarker();
+            } }
             tracksViewChanges={ true } />
     );
 };
@@ -26,9 +29,9 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
     const { latitude, longitude } = myCoordination;
     const seats = useSelector((state: RootState) => state.seats.seats);
 
-    const onPressMarker = () => {
+    const onPressMarker = (seat: ISeat) => {
         console.log('====================================');
-        console.log('선택했다.');
+        console.log(seat);
         console.log('====================================');
     };
 
@@ -39,8 +42,6 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
         if (!mapRef || !myCoordination) return;
 
         const { latitude, longitude } = myCoordination;
-
-        // setMapReady(true);
 
         mapRef.current!.animateCamera({
             center: {
@@ -64,8 +65,17 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
             <MapMarker
                 lat={ latitude }
                 lng={ longitude }
-                onPressMarker={ onPressMarker }
                 isMyLocation={ true } />
+            { seats && seats.map(seat => {
+                return <MapMarker
+                    key={ seat.id }
+                    lat={ seat.lat }
+                    lng={ seat.lng }
+                    onPressMarker={ () => {
+                        onPressMarker(seat);
+                    } }
+                />;
+            }) }
         </MapView>
     );
 };

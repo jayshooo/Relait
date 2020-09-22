@@ -14,8 +14,7 @@ import { MapContainer } from '../components/Maps';
 import { IHeaderView } from './types/MainScreen';
 import { getReverseGeocoding } from '../helpers/Geocoding';
 import { ILocation } from '../helpers/types';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/reducers';
+import { useDispatch } from 'react-redux';
 import { getSeats } from '../store/actions/seats/action';
 
 const bottomHeight = 53;
@@ -55,6 +54,7 @@ const HeaderView = ({ currentAddress, goToReservationScreen, findMyLocation }: I
                     style={ {
                         fontSize: TextSize.h2,
                         fontWeight: FontWeight.bold,
+                        flexShrink: 1,
                     } }>{ currentAddress }</Text>
                 <TouchableOpacity
                     style={ {
@@ -77,7 +77,6 @@ const MainScreen = () => {
     const [ hasPermission, setHasPermission ] = useState(true);
     const [ showRequestPermissionModal, setShowRequestPermissionModal ] = useState(false);
     const [ showHeader, setShowHeader ] = useState(true);
-    const [ showMap, setShowMap ] = useState(false);
     const [ myCoordination, setMyCoordination ] = useState<any>(null);
 
     useEffect(() => {
@@ -135,8 +134,12 @@ const MainScreen = () => {
 
     const dispatch = useDispatch();
     const _getSeats = async () => {
-        const getSeatsResult = await dispatch(getSeats());
-        // TODO. 시트정보 렌더링 해야함.
+        try {
+            await dispatch(getSeats());
+        }
+        catch (e) {
+            throw new Error(e);
+        }
     };
 
     useEffect(() => {
