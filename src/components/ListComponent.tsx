@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
-import { TouchableOpacity, View, Text, Image } from 'react-native';
+import { TouchableOpacity, View, Text, Image, ListRenderItem } from 'react-native';
 import { TextSize, Color, FontWeight } from '../constants/styles';
-import { IPlugView } from './types/ListComponent';
+import { IPlugView, IListComponent } from './types/ListComponent';
+import { ISeat } from '../store/reducers/seats/types';
 
 const PlugView: FC<IPlugView> = ({ hasPlug = false }) => {
 
@@ -24,7 +25,7 @@ const PlugView: FC<IPlugView> = ({ hasPlug = false }) => {
 
 };
 
-export const ListComponent = () => {
+export const ListComponent: FC<Partial<ISeat>> = ({ cafeName, leaveAt, thumbnailUrl, havePlug }) => {
 
     return (
         <TouchableOpacity
@@ -32,7 +33,7 @@ export const ListComponent = () => {
                 marginBottom: 24,
                 alignSelf: 'stretch',
                 flexDirection: 'row',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
             } }>
             <View
                 style={ { justifyContent: 'space-between' } }>

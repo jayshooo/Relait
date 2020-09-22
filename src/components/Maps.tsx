@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { IMapMarker, IMapContainer } from './types/Maps';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store/reducers';
 import { ISeat } from '../store/reducers/seats/types';
+import { useSeats } from '../utils/Hooks';
 
 export const MapMarker = ({ lat, lng, onPressMarker, isMyLocation = false }: IMapMarker) => {
 
@@ -27,7 +26,7 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
     if (!myCoordination) return null;
 
     const { latitude, longitude } = myCoordination;
-    const seats = useSelector((state: RootState) => state.seats.seats);
+    const seats = useSeats();
 
     const onPressMarker = (seat: ISeat) => {
         console.log('====================================');

@@ -5,7 +5,7 @@ export interface ITouchupBar {
     onPress?: (value?: number | SlidingUpPanelAnimationConfig) => void;
 }
 
-export interface IBottmoSlideBar {
+export interface IBottomSlideBar {
     bottomHeight: number;
     setShowHeader: (status: boolean) => void;
 }
