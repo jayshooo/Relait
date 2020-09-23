@@ -1,4 +1,6 @@
 import { ISeat } from '../../store/reducers/seats/types';
+import { RefObject } from 'react';
+import MapView from 'react-native-maps';
 
 export interface IMapContainer {
     myCoordination: {
@@ -10,6 +12,8 @@ export interface IMapContainer {
         longitude: number;
         speed: number;
     };
+    onPressItem: (seat: ISeat) => void;
+    setMapRefObj: (mapRef: RefObject<MapView>) => void;
 }
 
 export interface IMapMarker {

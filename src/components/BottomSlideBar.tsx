@@ -53,7 +53,7 @@ const TouchupBar: FC<ITouchupBar> = ({ showText = true, onPress }) => {
     );
 };
 
-export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeader }) => {
+export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeader, onPressItem }) => {
 
     const [ isExpand, setIsExpand ] = useState(false);
     const _bottomHeight = isIphoneX ? bottomHeight + 34 : bottomHeight;
@@ -69,7 +69,7 @@ export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeade
         setShowHeader(!isExpand);
     }, [ isExpand ]);
 
-    const onPress = useCallback(() => {
+    const onPressTouchBar = useCallback(() => {
         isExpand ? panel?.hide() : panel?.show();
     }, [ isExpand, panel ]);
 
@@ -96,15 +96,16 @@ export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeade
         return (
             <ListComponent
                 key={ item.address }
+                onPressItem={ () => {
+                    onPressTouchBar();
+                    onPressItem(item);
+                } }
                 cafeName={ item.cafeName }
                 leaveAt={ item.leaveAt }
                 thumbnailUrl={ item.thumbnailUrl }
                 havePlug={ item.havePlug } />
         );
     };
-
-    // TODO. 정보들 렌더해줘야함
-    // TODO. 아이템 눌렀을 때 해당 마커로 카메라 이동하도록 수정해야함
 
     return (
         <SlidingUpPanel
@@ -122,7 +123,7 @@ export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeade
                 style={ { flex: 1 } }>
                 <TouchupBar
                     showText={ !isExpand }
-                    onPress={ onPress } />
+                    onPress={ onPressTouchBar } />
                 <FlatList
                     keyExtractor={ (item) => {
                         return item.id.toString();

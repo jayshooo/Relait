@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View, Text, Image } from 'react-native';
 import { TextSize, Color, FontWeight } from '../constants/styles';
-import { IPlugView } from './types/ListComponent';
-import { ISeat } from '../store/reducers/seats/types';
+import { IPlugView, IListComponent } from './types/ListComponent';
 import moment from 'moment';
 
 const PlugView: FC<IPlugView> = ({ hasPlug = false }) => {
@@ -26,7 +25,7 @@ const PlugView: FC<IPlugView> = ({ hasPlug = false }) => {
 
 };
 
-export const ListComponent: FC<Partial<ISeat>> = ({ cafeName, leaveAt, thumbnailUrl, havePlug }) => {
+export const ListComponent: FC<IListComponent> = ({ cafeName, leaveAt, thumbnailUrl, havePlug, onPressItem }) => {
 
     const source = !!thumbnailUrl ? {
         uri: thumbnailUrl,
@@ -41,6 +40,9 @@ export const ListComponent: FC<Partial<ISeat>> = ({ cafeName, leaveAt, thumbnail
                 alignSelf: 'stretch',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
+            } }
+            onPress={ () => {
+                onPressItem();
             } }>
             <View
                 style={ { justifyContent: 'space-between', flex: 1, } }>

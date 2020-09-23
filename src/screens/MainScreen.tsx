@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, RefObject } from 'react';
 import { Text, View, Image } from 'react-native';
 import { checkNotifications, check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
@@ -8,7 +8,7 @@ import { TextSize, Color, FontWeight } from '../constants/styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BottomSlideBar } from '../components/BottomSlideBar';
 import { WriteButton } from '../components/WriteButton';
-import { StatusBarHeight } from '../utils/Helpers';
+import { StatusBarHeight, moveCamera } from '../utils/Helpers';
 import { MapContainer } from '../components/Maps';
 import { IHeaderView } from './types/MainScreen';
 import { getReverseGeocoding } from '../helpers/Geocoding';
@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSeats } from '../store/actions/seats/action';
 import { RootState } from '../store/reducers';
 import { setAuthorizationHeader } from '../constants/api';
+import MapView from 'react-native-maps';
+import { ISeat } from '../store/reducers/seats/types';
 
 const bottomHeight = 53;
 
@@ -80,6 +82,7 @@ const MainScreen = () => {
     const [ showHeader, setShowHeader ] = useState(true);
     const [ myCoordination, setMyCoordination ] = useState<any>(null);
     const { token } = useSelector((state: RootState) => state.myInfo);
+    const [ mapRefObj, setMapRefObj ] = useState<RefObject<MapView> | null>(null);
 
     useEffect(() => {
 
@@ -191,6 +194,16 @@ const MainScreen = () => {
         console.log('작성하기');
     };
 
+    const onPressItem = (seat: ISeat) => {
+        if (!mapRefObj) return;
+        const { lat, lng } = seat;
+        moveCamera({
+            mapRef: mapRefObj,
+            lat,
+            lng,
+        });
+    };
+
     return (
         <View
             style={ {
@@ -208,6 +221,12 @@ const MainScreen = () => {
                         findMyLocation={ findMyLocation } />
                 ) }
                 <MapContainer
+                    setMapRefObj={ (mapRef: RefObject<MapView>) => {
+                        setMapRefObj(mapRef);
+                    } }
+                    onPressItem={ (seat: ISeat) => {
+                        onPressItem(seat);
+                    } }
                     myCoordination={ myCoordination } />
                 <WriteButton
                     bottomHeight={ bottomHeight }
@@ -219,6 +238,9 @@ const MainScreen = () => {
                     } } />
             </View>
             <BottomSlideBar
+                onPressItem={ (seat: ISeat) => {
+                    onPressItem(seat);
+                } }
                 bottomHeight={ bottomHeight }
                 setShowHeader={ setShowHeader } />
         </View>

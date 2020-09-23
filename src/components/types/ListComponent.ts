@@ -4,9 +4,6 @@ export interface IPlugView {
     hasPlug: boolean;
 }
 
-export interface IListComponent {
-    cafeName: ISeat[ 'cafeName' ];
-    leaveAt: ISeat[ 'leaveAt' ];
-    thumbnailUrl: ISeat[ 'thumbnailUrl' ];
-    havePlug: ISeat[ 'havePlug' ];
+export interface IListComponent extends Partial<ISeat> {
+    onPressItem: () => void;
 }

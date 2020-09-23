@@ -1,8 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, RefAttributes, MutableRefObject } from 'react';
 import { IMapMarker, IMapContainer } from './types/Maps';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { ISeat } from '../store/reducers/seats/types';
 import { useSeats } from '../utils/Hooks';
+import { moveCamera } from '../utils/Helpers';
 
 export const MapMarker = ({ lat, lng, onPressMarker, isMyLocation = false }: IMapMarker) => {
 
@@ -21,24 +22,20 @@ export const MapMarker = ({ lat, lng, onPressMarker, isMyLocation = false }: IMa
     );
 };
 
-export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
+export const MapContainer: React.FC<IMapContainer> = ({ myCoordination, onPressItem, setMapRefObj }) => {
 
     if (!myCoordination) return null;
 
     const { latitude, longitude } = myCoordination;
     const seats = useSeats();
 
-    const onPressMarker = (seat: ISeat) => {
-        console.log('====================================');
-        console.log(seat);
-        console.log('====================================');
-    };
-
-    const mapRef = useRef<MapView | null>(null);
+    let mapRef = useRef<MapView | null>(null);
 
     useEffect(() => {
 
         if (!mapRef || !myCoordination) return;
+
+        setMapRefObj(mapRef);
 
         const { latitude, longitude } = myCoordination;
 
@@ -47,9 +44,9 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
                 latitude,
                 longitude,
             },
-            zoom: 17,
+            zoom: 18,
         }, {
-            duration: 200,
+            duration: 50,
         });
 
     }, [ myCoordination ]);
@@ -71,7 +68,7 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination }) => {
                     lat={ seat.lat }
                     lng={ seat.lng }
                     onPressMarker={ () => {
-                        onPressMarker(seat);
+                        onPressItem(seat);
                     } }
                 />;
             }) }
