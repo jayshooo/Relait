@@ -122,6 +122,9 @@ export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeade
                     showText={ !isExpand }
                     onPress={ onPress } />
                 <FlatList
+                    keyExtractor={ (item) => {
+                        return item.id.toString();
+                    } }
                     onTouchStart={ () => {
                         setAllowDrag(false);
                     } }

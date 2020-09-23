@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from './src/store/reducers';
 import AsyncStorage from '@react-native-community/async-storage';
 import { ASYNC_STORAGE_API_TOKEN } from './src/constants/constants';
+import { setAuthorizationHeader } from './src/constants/api';
 
 declare const global: { HermesInternal: null | {}; };
 
@@ -26,6 +27,7 @@ const App = () => {
     const setTokenToLocalStorage = async (token: string) => {
         try {
             await AsyncStorage.setItem(ASYNC_STORAGE_API_TOKEN, token);
+            setAuthorizationHeader(token);
         }
         catch (e) {
             throw new Error(e);

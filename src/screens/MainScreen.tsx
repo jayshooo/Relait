@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Text, View, Image, InteractionManager } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, Image } from 'react-native';
 import { checkNotifications, check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 
@@ -13,8 +13,10 @@ import { MapContainer } from '../components/Maps';
 import { IHeaderView } from './types/MainScreen';
 import { getReverseGeocoding } from '../helpers/Geocoding';
 import { ILocation } from '../helpers/types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getSeats } from '../store/actions/seats/action';
+import { RootState } from '../store/reducers';
+import { setAuthorizationHeader } from '../constants/api';
 
 const bottomHeight = 53;
 
@@ -77,6 +79,7 @@ const MainScreen = () => {
     const [ showRequestPermissionModal, setShowRequestPermissionModal ] = useState(false);
     const [ showHeader, setShowHeader ] = useState(true);
     const [ myCoordination, setMyCoordination ] = useState<any>(null);
+    const { token } = useSelector((state: RootState) => state.myInfo);
 
     useEffect(() => {
 
@@ -134,6 +137,7 @@ const MainScreen = () => {
     const dispatch = useDispatch();
     const _getSeats = async () => {
         try {
+            setAuthorizationHeader(token!);
             await dispatch(getSeats());
         }
         catch (e) {
@@ -158,9 +162,12 @@ const MainScreen = () => {
 
         checkPermissions();
         findMyLocation();
-        _getSeats();
 
     }, []);
+
+    useEffect(() => {
+        !!token && _getSeats();
+    }, [ token ]);
 
     const findMyLocation = () => {
         Geolocation.getCurrentPosition(info => {
