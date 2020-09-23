@@ -43,6 +43,13 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
+      <key>img1.daumcdn.net</key>
+      <dict>
+        <key>NSIncludesSubdomains</key>
+        <true/>
+        <key>NSExceptionAllowsInsecureHTTPLoads</key>
+        <true/>
+      </dict>
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>

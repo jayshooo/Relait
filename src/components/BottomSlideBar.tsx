@@ -15,13 +15,15 @@ let panel: SlidingUpPanel | null = null;
 
 const TouchupBar: FC<ITouchupBar> = ({ showText = true, onPress }) => {
 
+    const paddingBottom = showText && isIphoneX ? 50 : 34;
+
     return (
         <TouchableOpacity
             activeOpacity={ 1 }
             style={ {
                 backgroundColor: Color.white,
                 paddingTop: 8,
-                paddingBottom: 34,
+                paddingBottom,
                 justifyContent: 'flex-start',
                 alignItems: 'center',
                 borderTopLeftRadius: 16,
