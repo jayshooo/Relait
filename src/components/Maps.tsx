@@ -1,9 +1,7 @@
-import React, { useRef, useEffect, RefAttributes, MutableRefObject } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { IMapMarker, IMapContainer } from './types/Maps';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { ISeat } from '../store/reducers/seats/types';
 import { useSeats } from '../utils/Hooks';
-import { moveCamera } from '../utils/Helpers';
 
 export const MapMarker = ({ lat, lng, onPressMarker, isMyLocation = false }: IMapMarker) => {
 
