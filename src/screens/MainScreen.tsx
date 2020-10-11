@@ -1,5 +1,5 @@
 import React, { useState, useEffect, RefObject } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, Dimensions } from 'react-native';
 import { checkNotifications, check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 
@@ -21,6 +21,76 @@ import MapView from 'react-native-maps';
 import { ISeat } from '../store/reducers/seats/types';
 
 const bottomHeight = 53;
+const { width } = Dimensions.get('window');
+
+const makeSpotPanel = ({ seat, onPress }: { seat: null | ISeat; onPress: () => void; }) => {
+
+    const hasSeat = !!seat;
+    const spotName = hasSeat ? seat!.cafeName : '어디서 작업 중이야?';
+
+    const Button = () => {
+        return (
+            <TouchableOpacity
+                onPress={ onPress }
+                activeOpacity={ .7 }
+                style={ {
+                    marginTop: 16,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    paddingHorizontal: 12,
+                    paddingVertical: 20,
+                    borderRadius: 16,
+                    backgroundColor: hasSeat ? Color.purplishBlue : Color.gray,
+                    marginBottom: 8,
+                } }>
+                <Text
+                    style={ {
+                        marginTop: 2,
+                        fontSize: TextSize.h4,
+                        fontWeight: FontWeight.bold,
+                        color: hasSeat ? Color.white : Color.grayTwo,
+                    } }>장소 선택하기</Text>
+            </TouchableOpacity>
+        );
+    };
+
+    return (
+        <View
+            style={ {
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                width,
+                padding: 24,
+                borderTopLeftRadius: 16,
+                borderTopRightRadius: 8,
+                backgroundColor: Color.white,
+            } }>
+            <View
+                style={ {
+                    flex: 1,
+                    borderWidth: 1,
+                    borderRadius: 16,
+                    borderColor: Color.gray,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingHorizontal: 12,
+                    paddingVertical: 16,
+                } }>
+                <Text
+                    style={ {
+                        marginTop: 2,
+                        fontSize: TextSize.h4,
+                        fontWeight: FontWeight.bold,
+                        color: hasSeat ? Color.darkTwo : Color.gray,
+                    } }>{ spotName }</Text>
+                <Image source={ require('../resources/icons/SearchIcon.png') }></Image>
+            </View>
+            <Button />
+        </View>
+    );
+};
 
 const HeaderView = ({ goBack, makeSpot, currentAddress, goToReservationScreen, findMyLocation }: IHeaderView) => {
 
@@ -106,6 +176,7 @@ const MainScreen = () => {
     const { token } = useSelector((state: RootState) => state.myInfo);
     const [ mapRefObj, setMapRefObj ] = useState<RefObject<MapView> | null>(null);
     const [ makeSpot, setMakeSpot ] = useState(false);
+    const [ selectedSeat, setSelectedSeat ] = useState<ISeat | null>(null);
 
     useEffect(() => {
 
@@ -227,6 +298,31 @@ const MainScreen = () => {
             lat,
             lng,
         });
+        setSelectedSeat(seat);
+    };
+
+    const navigateToMakeSpotScreen = () => {
+        console.log('====================================');
+        console.log('자리생성 페이지로 이동');
+        console.log('====================================');
+    };
+
+    const bottomView = () => {
+        if (makeSpot) {
+            return makeSpotPanel({
+                seat: selectedSeat,
+                onPress: navigateToMakeSpotScreen,
+            });
+        }
+
+        return (
+            <BottomSlideBar
+                onPressItem={ (seat: ISeat) => {
+                    onPressItem(seat);
+                } }
+                bottomHeight={ bottomHeight }
+                setShowHeader={ setShowHeader } />
+        );
     };
 
     return (
@@ -255,21 +351,16 @@ const MainScreen = () => {
                         onPressItem(seat);
                     } }
                     myCoordination={ myCoordination } />
-                <WriteButton
+                { !makeSpot && <WriteButton
                     bottomHeight={ bottomHeight }
-                    onPressWriteButton={ onPressWriteButton } />
+                    onPressWriteButton={ onPressWriteButton } /> }
                 <RequestPermissionModal
                     visible={ showRequestPermissionModal }
                     onRequestClose={ () => {
                         setHasPermission(true);
                     } } />
             </View>
-            <BottomSlideBar
-                onPressItem={ (seat: ISeat) => {
-                    onPressItem(seat);
-                } }
-                bottomHeight={ bottomHeight }
-                setShowHeader={ setShowHeader } />
+            { bottomView() }
         </View>
     );
 };
