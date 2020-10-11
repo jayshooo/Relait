@@ -22,7 +22,29 @@ import { ISeat } from '../store/reducers/seats/types';
 
 const bottomHeight = 53;
 
-const HeaderView = ({ currentAddress, goToReservationScreen, findMyLocation }: IHeaderView) => {
+const HeaderView = ({ goBack, makeSpot, currentAddress, goToReservationScreen, findMyLocation }: IHeaderView) => {
+
+    if (makeSpot) {
+        return (
+            <View
+                onStartShouldSetResponder={ () => {
+                    return true;
+                } }
+                style={ {
+                    position: "absolute",
+                    left: 24,
+                    top: 38 + StatusBarHeight,
+                    zIndex: 1,
+                } }>
+                <TouchableOpacity
+                    activeOpacity={ .7 }
+                    onPress={ goBack }>
+                    <Image
+                        source={ require('../resources/icons/BackBtn.png') }></Image>
+                </TouchableOpacity>
+            </View>
+        );
+    }
 
     return (
         <View
@@ -83,6 +105,7 @@ const MainScreen = () => {
     const [ myCoordination, setMyCoordination ] = useState<any>(null);
     const { token } = useSelector((state: RootState) => state.myInfo);
     const [ mapRefObj, setMapRefObj ] = useState<RefObject<MapView> | null>(null);
+    const [ makeSpot, setMakeSpot ] = useState(false);
 
     useEffect(() => {
 
@@ -191,7 +214,9 @@ const MainScreen = () => {
     };
 
     const onPressWriteButton = () => {
-        console.log('작성하기');
+        setMakeSpot(prev => {
+            return !prev;
+        });
     };
 
     const onPressItem = (seat: ISeat) => {
@@ -216,6 +241,8 @@ const MainScreen = () => {
                 } }>
                 { showHeader && (
                     <HeaderView
+                        goBack={ onPressWriteButton }
+                        makeSpot={ makeSpot }
                         currentAddress={ currentAddress }
                         goToReservationScreen={ goToReservationScreen }
                         findMyLocation={ findMyLocation } />
