@@ -38,7 +38,7 @@ const makeSpotPanel = ({ seat, onPress }: { seat: null | ISeat; onPress: () => v
                     justifyContent: "center",
                     alignItems: "center",
                     paddingHorizontal: 12,
-                    paddingVertical: 20,
+                    paddingVertical: 16,
                     borderRadius: 16,
                     backgroundColor: hasSeat ? Color.purplishBlue : Color.gray,
                     marginBottom: 8,
@@ -75,8 +75,8 @@ const makeSpotPanel = ({ seat, onPress }: { seat: null | ISeat; onPress: () => v
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    paddingHorizontal: 12,
-                    paddingVertical: 16,
+                    paddingVertical: 12,
+                    paddingHorizontal: 16,
                 } }>
                 <Text
                     style={ {
@@ -85,7 +85,10 @@ const makeSpotPanel = ({ seat, onPress }: { seat: null | ISeat; onPress: () => v
                         fontWeight: FontWeight.bold,
                         color: hasSeat ? Color.darkTwo : Color.gray,
                     } }>{ spotName }</Text>
-                <Image source={ require('../resources/icons/SearchIcon.png') }></Image>
+                <Image style={ {
+                    width: 32,
+                    height: 32,
+                } } source={ require('../resources/icons/SearchIcon.png') }></Image>
             </View>
             <Button />
         </View>
@@ -285,9 +288,7 @@ const MainScreen = () => {
     };
 
     const onPressWriteButton = () => {
-        setMakeSpot(prev => {
-            return !prev;
-        });
+        setMakeSpot(true);
     };
 
     const onPressItem = (seat: ISeat) => {
@@ -299,12 +300,19 @@ const MainScreen = () => {
             lng,
         });
         setSelectedSeat(seat);
+        setMakeSpot(true);
+        setShowHeader(true);
     };
 
     const navigateToMakeSpotScreen = () => {
         console.log('====================================');
-        console.log('자리생성 페이지로 이동');
+        console.log('현재 선택한 장소', selectedSeat);
         console.log('====================================');
+    };
+
+    const goBack = () => {
+        setSelectedSeat(null);
+        setMakeSpot(false);
     };
 
     const bottomView = () => {
@@ -337,7 +345,7 @@ const MainScreen = () => {
                 } }>
                 { showHeader && (
                     <HeaderView
-                        goBack={ onPressWriteButton }
+                        goBack={ goBack }
                         makeSpot={ makeSpot }
                         currentAddress={ currentAddress }
                         goToReservationScreen={ goToReservationScreen }
