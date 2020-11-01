@@ -8,6 +8,7 @@ import { TextSize, Color, FontWeight } from '../constants/styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BottomSlideBar } from '../components/BottomSlideBar';
 import { WriteButton } from '../components/WriteButton';
+import { Button } from '../components/forms/Button';
 import { StatusBarHeight, moveCamera } from '../utils/Helpers';
 import { MapContainer } from '../components/Maps';
 import { IHeaderView } from './types/MainScreen';
@@ -19,6 +20,7 @@ import { RootState } from '../store/reducers';
 import { setAuthorizationHeader } from '../constants/api';
 import MapView from 'react-native-maps';
 import { ISeat } from '../store/reducers/seats/types';
+import { useNavigation } from '@react-navigation/native';
 
 const bottomHeight = 53;
 const { width } = Dimensions.get('window');
@@ -27,32 +29,9 @@ const makeSpotPanel = ({ seat, onPress }: { seat: null | ISeat; onPress: () => v
 
     const hasSeat = !!seat;
     const spotName = hasSeat ? seat!.cafeName : '어디서 작업 중이야?';
-
-    const Button = () => {
-        return (
-            <TouchableOpacity
-                onPress={ onPress }
-                activeOpacity={ .7 }
-                style={ {
-                    marginTop: 16,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    paddingHorizontal: 12,
-                    paddingVertical: 16,
-                    borderRadius: 16,
-                    backgroundColor: hasSeat ? Color.purplishBlue : Color.gray,
-                    marginBottom: 8,
-                } }>
-                <Text
-                    style={ {
-                        marginTop: 2,
-                        fontSize: TextSize.h4,
-                        fontWeight: FontWeight.bold,
-                        color: hasSeat ? Color.white : Color.grayTwo,
-                    } }>장소 선택하기</Text>
-            </TouchableOpacity>
-        );
-    };
+    const backgroundColor = hasSeat ? Color.purplishBlue : Color.gray;
+    const color = hasSeat ? Color.white : Color.grayTwo;
+    const label = '장소 선택하기';
 
     return (
         <View
@@ -90,7 +69,11 @@ const makeSpotPanel = ({ seat, onPress }: { seat: null | ISeat; onPress: () => v
                     height: 32,
                 } } source={ require('../resources/icons/SearchIcon.png') }></Image>
             </View>
-            <Button />
+            <Button
+                onPress={ onPress }
+                label={ label }
+                backgroundColor={ backgroundColor }
+                color={ color } />
         </View>
     );
 };
@@ -106,7 +89,7 @@ const HeaderView = ({ goBack, makeSpot, currentAddress, goToReservationScreen, f
                 style={ {
                     position: "absolute",
                     left: 24,
-                    top: 38 + StatusBarHeight,
+                    top: 12 + StatusBarHeight,
                     zIndex: 1,
                 } }>
                 <TouchableOpacity
@@ -269,6 +252,8 @@ const MainScreen = () => {
         !!token && _getSeats();
     }, [ token ]);
 
+    const navigation = useNavigation();
+
     const findMyLocation = () => {
         Geolocation.getCurrentPosition(info => {
             const { coords } = info;
@@ -305,9 +290,10 @@ const MainScreen = () => {
     };
 
     const navigateToMakeSpotScreen = () => {
-        console.log('====================================');
-        console.log('현재 선택한 장소', selectedSeat);
-        console.log('====================================');
+        if (!selectedSeat) return;
+        navigation.navigate('RegisterPlaceScreen', {
+            selectedSeat,
+        });
     };
 
     const goBack = () => {

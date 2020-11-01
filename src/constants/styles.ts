@@ -9,6 +9,8 @@ export const Color = {
     white: '#ffffff',
     black: '#000000',
     deepOrange: '#ef4b0e',
+    grayLighter: '#f2f3f3',
+    powderBlue: '#d4d9df',
 };
 
 export const TextSize = {
