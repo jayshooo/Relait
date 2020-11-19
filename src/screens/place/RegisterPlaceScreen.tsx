@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, View, Text, Image } from 'react-native';
 import { Header } from '../../components/Header';
 import { useNavigation } from '@react-navigation/native';
@@ -6,6 +6,10 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { TextSize, Color, FontWeight } from '../../constants/styles';
 import { InputBox } from '../../components/forms/InputBox';
 import { Button } from '../../components/forms/Button';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from 'moment';
+import { PickerButton } from '../../components/forms/PickerButton';
+import { Value } from 'react-native-reanimated';
 
 const SectionHeader: React.FC<{ title: string; }> = ({ title }) => {
     return (
@@ -27,7 +31,7 @@ const SectionHeader: React.FC<{ title: string; }> = ({ title }) => {
 
 const CheckboxButton: React.FC<{ title: string; isChecked: boolean; onPress: () => void; }> = ({ title, isChecked, onPress }) => {
     // TODO. 아이콘 작업 해야함
-    // const source = isChecked ? require('../')
+    const source = isChecked ? require('../../resources/icons/Unchecked.png') : require('../../resources/icons/Unchecked.png');
 
     return (
         <TouchableOpacity
@@ -39,13 +43,9 @@ const CheckboxButton: React.FC<{ title: string; isChecked: boolean; onPress: () 
                 if (!onPress) return;
                 onPress();
             } }>
-            <View style={ {
-                width: 28,
-                height: 28,
-                backgroundColor: Color.purplishBlue,
-                borderRadius: 50,
+            <Image style={ {
                 marginRight: 8,
-            } } />
+            } } source={source}/>
             <Text
                 style={ {
                     fontSize: TextSize.h5,
@@ -56,13 +56,60 @@ const CheckboxButton: React.FC<{ title: string; isChecked: boolean; onPress: () 
 
 export const RegisterPlaceScreen: React.FC = () => {
 
-    const [ hasPlug, setHasPlug ] = useState(false);
-
     const navigation = useNavigation();
+    const [ hasPlug, setHasPlug ] = useState(false);
+    const [ showPicker, setShowPicker ] = useState(false);
+    const [ currentPickerCursor, setCurrentPickerCursor ] = useState('open');
+    const [ openDate, setOpenDate ] = useState<{
+        epoch: number,
+        time: string,
+    }>({
+        epoch: 0,
+        time: '',
+    });
+    const [ closeDate, setCloseDate ] = useState<{
+        epoch: number,
+        time: string,
+    }>({
+        epoch: 0,
+        time: '',
+    });
+    const [ closePlaceDate, setClosePlaceDate ] = useState<{
+        epoch: number,
+        time: string,
+    }>({
+        epoch: 0,
+        time: '',
+    });
+
     const goBack = useCallback(() => {
         navigation.goBack();
     }, []);
 
+    const convertEpochTime = useCallback((date: Date) => {
+        
+        const timeObj = {
+            epoch: moment(date).valueOf(),
+            time: moment(date).format('HH:mm'),
+        };
+        
+        const setDateValue: { [key: string]: () => void } = {
+            ['open']: () => setOpenDate(timeObj),
+            ['close']: () => setCloseDate(timeObj),
+            ['closePlace']: () => setClosePlaceDate(timeObj),
+        };
+
+        setDateValue[currentPickerCursor]();
+        togglePicker();
+
+    }, [ currentPickerCursor ]);
+    
+    const togglePicker = useCallback((type?: string) => {
+        setShowPicker(prev => !prev);
+        if (!type) return;
+        setCurrentPickerCursor(type);
+    }, []);
+    
     const onPress = () => {
         console.log('====================================');
         console.log('버튼 클릭!');
@@ -120,15 +167,23 @@ export const RegisterPlaceScreen: React.FC = () => {
                             flexDirection: 'row',
                             marginBottom: 32,
                         } }>
-                        <InputBox
-                            label={ '오픈' }
+                        <PickerButton
+                            onPress={ () => {
+                                togglePicker('open')
+                            } }
+                            label="오픈"
                             placeholder={ 'ex. 10:00' }
+                            value={ openDate.time }
                             containerStyle={ {
                                 marginRight: 8,
                             } } />
-                        <InputBox
-                            label={ '마감' }
-                            placeholder={ 'ex. 21:00' } />
+                        <PickerButton
+                            onPress={ () => {
+                                togglePicker('close')
+                            } }
+                            placeholder={ 'ex. 21:00' }
+                            label="마감"
+                            value={ closeDate.time } />
                     </View>
                     <View
                         style={ {
@@ -154,13 +209,24 @@ export const RegisterPlaceScreen: React.FC = () => {
                             marginTop: 40,
                         } }>
                         <SectionHeader title={ '기버 정보' } />
-                        <InputBox
+                        <PickerButton
+                            onPress={ () => {
+                                togglePicker('closePlace')
+                            } }
+                            label="작업 종료 시간"
+                            placeholder={ 'ex. 21:00' }
+                            value={ closePlaceDate.time }
+                            containerStyle={ {
+                                marginBottom: 24,
+                            } }
+                            isBold={ true } />
+                        {/* <InputBox
                             label={ '작업 종료 시간' }
                             placeholder={ 'ex. 10:00' }
                             isBold={ true }
                             containerStyle={ {
                                 marginBottom: 24,
-                            } } />
+                            } } /> */}
                         <InputBox
                             label={ '자리 설명' }
                             placeholder={ '자리 위치, 좌석 가능 인원 수 등 자리에 대한 자세한 설명을 적어줘!' }
@@ -189,6 +255,15 @@ export const RegisterPlaceScreen: React.FC = () => {
                         label={ '올리기' } />
                 </View>
             </ScrollView>
+            <DateTimePickerModal isVisible={showPicker} mode="time"
+                cancelTextIOS={ '취소' }
+                confirmTextIOS={ '확인' }
+                headerTextIOS={ '시간을 선택하세요' }
+                onConfirm={ convertEpochTime }
+                onCancel={ () => {
+                    togglePicker();
+                } }
+            />
         </SafeAreaView >
     );
 };
