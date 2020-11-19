@@ -6,6 +6,7 @@ import MainScreen from '../screens/MainScreen';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { RegisterPlaceScreen } from '../screens/place/RegisterPlaceScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -13,6 +14,7 @@ export type RootStackParamList = {
     SplashScreen: undefined;
     LoginScreen: undefined;
     MainScreen: undefined;
+    RegisterPlaceScreen: undefined;
 };
 
 const AppNavigation = () => {
@@ -32,6 +34,9 @@ const AppNavigation = () => {
                 <Stack.Screen
                     name="MainScreen"
                     component={ MainScreen } />
+                <Stack.Screen
+                    name="RegisterPlaceScreen"
+                    component={ RegisterPlaceScreen } />
             </Stack.Navigator>
         </NavigationContainer>
     );
