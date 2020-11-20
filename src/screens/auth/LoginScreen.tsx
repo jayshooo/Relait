@@ -27,7 +27,7 @@ const LoginScreen: React.FC = () => {
 		} catch (e) {
 			throw new Error(e);
 		}
-	}, [dispatch, navigation]);
+	}, [ dispatch, navigation ]);
 
 	return (
 		<SafeAreaView
@@ -62,7 +62,7 @@ const LoginScreen: React.FC = () => {
 						fontSize: TextSize.h1,
 					} }>
 					오늘은 또
-				</Text>
+                </Text>
 				<Text
 					style={
 						{

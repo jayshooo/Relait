@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useState } from "react";
 import { SafeAreaView, View, Text, Image } from "react-native";
 import { Header } from "../../components/Header";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { TextSize, Color, FontWeight } from "../../constants/styles";
 import { InputBox } from "../../components/forms/InputBox";
@@ -9,7 +9,8 @@ import { Button } from "../../components/forms/Button";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { PickerButton } from "../../components/forms/PickerButton";
-import { CheckboxButtonInterface, PickerEnum, RegisterTimeType, SectionHeaderInterface } from "../types/RegisterPlaceScreen";
+import { CheckboxButtonInterface, PickerEnum, RegisterTimeType, RegisterDataInterface, SectionHeaderInterface } from "../types/RegisterPlaceScreen";
+import { RootStackParamList } from "../../navigation/Navigation";
 
 const SectionHeader = memo<SectionHeaderInterface>(({ title }) => {
 	return (
@@ -25,17 +26,13 @@ const SectionHeader = memo<SectionHeaderInterface>(({ title }) => {
 					fontSize: TextSize.h4,
 					color: Color.darkTwo,
 				} }>
-				{title}
+				{ title }
 			</Text>
 		</View>
 	);
 });
 
-const CheckboxButton = memo<CheckboxButtonInterface>(({
-	title,
-	isChecked,
-	onPress,
-}) => {
+const CheckboxButton = memo<CheckboxButtonInterface>(({ title, isChecked, onPressCheckboxButton }) => {
 	// TODO. 아이콘 작업 해야함
 	const source = isChecked ? require("../../resources/icons/Unchecked.png") : require("../../resources/icons/Unchecked.png");
 
@@ -46,10 +43,10 @@ const CheckboxButton = memo<CheckboxButtonInterface>(({
 				alignItems: "center",
 			} }
 			onPress={ () => {
-				if (!onPress) {
+				if (!onPressCheckboxButton) {
 					return;
 				}
-				onPress();
+				onPressCheckboxButton();
 			} }>
 			<Image
 				style={ {
@@ -61,7 +58,7 @@ const CheckboxButton = memo<CheckboxButtonInterface>(({
 				style={ {
 					fontSize: TextSize.h5,
 				} }>
-				{title}
+				{ title }
 			</Text>
 		</TouchableOpacity>
 	);
@@ -70,27 +67,47 @@ const CheckboxButton = memo<CheckboxButtonInterface>(({
 export const RegisterPlaceScreen = memo(() => {
 
 	const navigation = useNavigation();
-	const [hasPlug, setHasPlug] = useState(false);
-	const [showPicker, setShowPicker] = useState(false);
-    const [currentPickerCursor, setCurrentPickerCursor] = useState(PickerEnum.close);
-    const [times, setTimes] = useState<RegisterTimeType>({
-        [ PickerEnum.open ]: {
-            epoch: 0,
-            time: "",
-        },
-        [ PickerEnum.close ]: {
-            epoch: 0,
-            time: "",
-        },
-        [ PickerEnum.closePlace ]: {
-            epoch: 0,
-            time: "",
-        },
-    });
+	const { params } = useRoute<RouteProp<RootStackParamList, "RegisterPlaceScreen">>();
+	const { selectedSeat } = params;
+
+	const [ showPicker, setShowPicker ] = useState(false);
+	const [ currentPickerCursor, setCurrentPickerCursor ] = useState(PickerEnum.close);
+	const [ times, setTimes ] = useState<RegisterTimeType>({
+		[ PickerEnum.open ]: {
+			epoch: 0,
+			time: "",
+		},
+		[ PickerEnum.close ]: {
+			epoch: 0,
+			time: "",
+		},
+		[ PickerEnum.descriptionCloseTime ]: {
+			epoch: 0,
+			time: "",
+		},
+	});
+
+	const [ data, setData ] = useState<RegisterDataInterface>({
+		descriptionSeat: "",
+		descriptionGiver: "",
+		havePlug: 0,
+	});
+
+	const onChangeText = useCallback((textData: {[key: string]: string}) => {
+
+		if (!textData) {return;}
+		setData((prev) => {
+			return {
+				...prev,
+				...textData,
+			};
+		});
+
+	}, []);
 
 	const goBack = useCallback(() => {
 		navigation.goBack();
-	}, [navigation]);
+	}, [ navigation ]);
 
 	const togglePicker = useCallback((type?: PickerEnum) => {
 		setShowPicker((prev) => !prev);
@@ -101,24 +118,58 @@ export const RegisterPlaceScreen = memo(() => {
 	}, []);
 
 	const convertEpochTime = useCallback((date: Date) => {
-        const timeObj = {
-            epoch: moment(date).valueOf(),
-            time: moment(date).format("HH:mm"),
-        };
-        setTimes((prev: RegisterTimeType) => {
-            return {
-                ...prev,
-                [ currentPickerCursor ]: timeObj,
-            };
-        });
-        togglePicker();
-    }, [currentPickerCursor, togglePicker]);
+		const timeObj = {
+			epoch: moment(date).valueOf(),
+			time: moment(date).format("HH:mm"),
+		};
+		setTimes((prev: RegisterTimeType) => {
+			return {
+				...prev,
+				[ currentPickerCursor ]: timeObj,
+			};
+		});
+		setData(prev => {
+			return {
+				...prev,
 
-	const onPress = () => {
-		console.log("====================================");
-		console.log("버튼 클릭!");
-		console.log("====================================");
-	};
+			};
+		});
+		togglePicker();
+	}, [ currentPickerCursor, togglePicker ]);
+
+	const onPressCheckboxButton = useCallback(() => {
+		setData(prev => {
+			return {
+				...prev,
+				havePlug: ~~!prev.havePlug,
+			};
+		});
+	}, []);
+
+	const isValidateData = useCallback(() => {
+		const { descriptionGiver, descriptionSeat } = data;
+		const { descriptionCloseTime } = times;
+
+		return !!descriptionGiver && !!descriptionSeat && !!descriptionCloseTime.epoch;
+	}, [ data, times ]);
+
+	const onPressConfirm = useCallback(() => {
+
+		if (!selectedSeat || !isValidateData()) {return false;}
+
+		const regiseterData = {
+			cafeName: selectedSeat.cafeName,
+			address: selectedSeat.address,
+			lat: selectedSeat.lat,
+			lng: selectedSeat.lng,
+			thumbnailUrl: selectedSeat.thumbnailUrl,
+			spaceKakaoMapId: selectedSeat.spaceKakaoMapId,
+			...data,
+		};
+
+		// TODO. API 연동해야함
+
+	}, [ data, selectedSeat, isValidateData ]);
 
 	return (
 		<SafeAreaView
@@ -144,7 +195,7 @@ export const RegisterPlaceScreen = memo(() => {
 							lineHeight: 20,
 							color: Color.darkTwo,
 						} }>
-						{"테이커가 예약 시 참고할 수 있도록\n작업 중인 자리에 대한 정보를 입력해줘."}
+						{ "테이커가 예약 시 참고할 수 있도록\n작업 중인 자리에 대한 정보를 입력해줘." }
 					</Text>
 				</View>
 				<View
@@ -181,7 +232,7 @@ export const RegisterPlaceScreen = memo(() => {
 						<PickerButton
 							onPress={ () => {
 								togglePicker(PickerEnum.open);
-                            } }
+							} }
 							label="오픈"
 							placeholder={ "ex. 10:00" }
 							value={ times[ PickerEnum.open ].time }
@@ -220,10 +271,8 @@ export const RegisterPlaceScreen = memo(() => {
 					</View>
 					<CheckboxButton
 						title={ "응, 있어" }
-						isChecked={ hasPlug }
-						onPress={ () => {
-							setHasPlug((prev) => !prev);
-						} }
+						isChecked={ data.havePlug }
+						onPressCheckboxButton={ onPressCheckboxButton }
 					/>
 					<View
 						style={ {
@@ -233,11 +282,11 @@ export const RegisterPlaceScreen = memo(() => {
 							title={ "기버 정보" } />
 						<PickerButton
 							onPress={ () => {
-								togglePicker(PickerEnum.closePlace);
+								togglePicker(PickerEnum.descriptionCloseTime);
 							} }
 							label="작업 종료 시간"
 							placeholder={ "ex. 10:00" }
-							value={ times[ PickerEnum.closePlace ].time }
+							value={ times[ PickerEnum.descriptionCloseTime ].time }
 							containerStyle={ {
 								marginBottom: 24,
 							} }
@@ -254,6 +303,9 @@ export const RegisterPlaceScreen = memo(() => {
 							inputStyle={ {
 								height: 96,
 							} }
+							onChangeText={ (value) => {
+								onChangeText({ "descriptionSeat": value });
+							} }
 						/>
 						<InputBox
 							label={ "식별 안내" }
@@ -266,10 +318,13 @@ export const RegisterPlaceScreen = memo(() => {
 							inputStyle={ {
 								height: 96,
 							} }
+							onChangeText={ (value) => {
+								onChangeText({ "descriptionGiver": value });
+							} }
 						/>
 					</View>
 					<Button
-						onPress={ onPress }
+						onPress={ onPressConfirm }
 						label={ "올리기" } />
 				</View>
 			</ScrollView>

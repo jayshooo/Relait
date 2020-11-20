@@ -1,7 +1,7 @@
 export enum PickerEnum {
     "open" = "open",
     "close" = "close",
-    "closePlace" = "closePlace"
+    "descriptionCloseTime" = "descriptionCloseTime"
 }
 
 export interface SectionHeaderInterface {
@@ -10,8 +10,14 @@ export interface SectionHeaderInterface {
 
 export interface CheckboxButtonInterface {
     title: string;
-    isChecked: boolean;
-    onPress: () => void;
+    isChecked: number;
+    onPressCheckboxButton: () => void;
 }
 
 export type RegisterTimeType = {[key in PickerEnum]: { epoch: number, time: string }};
+
+export interface RegisterDataInterface {
+    descriptionSeat: string;
+    descriptionGiver: string;
+    havePlug: number;
+}
