@@ -1,4 +1,4 @@
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle } from "react-native";
 
 export interface InputBoxInterface {
     label?: string;
@@ -7,4 +7,5 @@ export interface InputBoxInterface {
     containerStyle?: StyleProp<ViewStyle>;
     inputStyle?: StyleProp<ViewStyle>;
     multiline?: boolean;
+    onChangeText: (value: string) => void;
 }

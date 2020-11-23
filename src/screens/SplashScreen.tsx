@@ -93,7 +93,7 @@ const SplashScreen = ({ navigation }: ISplashScreenProps) => {
         <SafeAreaView
             style={ styles.view }>
             <Image
-                source={ require('../resources/icons/RelaitLogo.png') }
+                source={ require('../resources/icons/Logo.png') }
                 resizeMode={ 'contain' }></Image>
         </SafeAreaView>
     );
