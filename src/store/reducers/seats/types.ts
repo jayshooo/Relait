@@ -19,4 +19,5 @@ export interface ISeat {
 
 export interface ISeatsInitialState {
     seats: ISeat[] | null;
+    selectedSeat: ISeat | null;
 }

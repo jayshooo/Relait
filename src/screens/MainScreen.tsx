@@ -15,12 +15,13 @@ import { IHeaderView } from "./types/MainScreen";
 import { getReverseGeocoding } from "../helpers/Geocoding";
 import { ILocation } from "../helpers/types";
 import { useDispatch, useSelector } from "react-redux";
-import { getSeats } from "../store/actions/seats/action";
+import { getSeats, setSelectedSeat } from "../store/actions/seats/action";
 import { RootState } from "../store/reducers";
 import { setAuthorizationHeader } from "../constants/api";
 import MapView from "react-native-maps";
 import { ISeat } from "../store/reducers/seats/types";
 import { useNavigation } from "@react-navigation/native";
+import { useSelectedSeat } from "../utils/hooks/useSelectedSeat";
 
 const bottomHeight = 53;
 const { width } = Dimensions.get("window");
@@ -166,7 +167,7 @@ const MainScreen = () => {
 	const { token } = useSelector((state: RootState) => state.myInfo);
 	const [ mapRefObj, setMapRefObj ] = useState<RefObject<MapView> | null>(null);
 	const [ makeSpot, setMakeSpot ] = useState(false);
-	const [ selectedSeat, setSelectedSeat ] = useState<ISeat | null>(null);
+	const { selectedSeat } = useSelectedSeat();
 
 	useEffect(() => {
 
@@ -274,6 +275,8 @@ const MainScreen = () => {
 
 	const goToReservationScreen = () => {
 		console.log("예약현황 스크린으로 이동");
+		// for test
+		navigation.navigate("PlaceDetailScreen");
 	};
 
 	const onPressWriteButton = () => {
@@ -288,20 +291,20 @@ const MainScreen = () => {
 			lat,
 			lng,
 		});
-		setSelectedSeat(seat);
+		dispatch(setSelectedSeat(seat));
 		setMakeSpot(true);
 		setShowHeader(true);
 	};
 
 	const navigateToMakeSpotScreen = () => {
 		if (!selectedSeat) {return;}
-		navigation.navigate("RegisterPlaceScreen", {
+		navigation.navigate("PlaceRegistScreen", {
 			selectedSeat,
 		});
 	};
 
 	const goBack = () => {
-		setSelectedSeat(null);
+		dispatch(setSelectedSeat(null));
 		setMakeSpot(false);
 	};
 
