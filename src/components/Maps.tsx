@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import { IMapMarker, IMapContainer } from "./types/Maps";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-import { useSeats } from "../utils/Hooks";
+import { useSeats } from "../utils/hooks/useSeats";
+import { moveCamera } from "../utils/Helpers";
 
 export const MapMarker = ({ lat, lng, onPressMarker, isMyLocation = false }: IMapMarker) => {
 
@@ -20,12 +21,10 @@ export const MapMarker = ({ lat, lng, onPressMarker, isMyLocation = false }: IMa
 	);
 };
 
-export const MapContainer: React.FC<IMapContainer> = ({ myCoordination, onPressItem, setMapRefObj }) => {
-
-	if (!myCoordination) {return null;}
+export const MapContainer: React.FC<IMapContainer> = ({ myCoordination, onPressPlace, setMapRefObj }) => {
 
 	const { latitude, longitude } = myCoordination;
-	const seats = useSeats();
+	const { seats } = useSeats();
 
 	let mapRef = useRef<MapView | null>(null);
 
@@ -33,24 +32,19 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination, onPressI
 
 		if (!mapRef || !myCoordination) {return;}
 
-		setMapRefObj(mapRef);
+		moveCamera({
+			mapRef,
+			lat: latitude,
+			lng: longitude,
+		});
 
-		const { latitude, longitude } = myCoordination;
-
-        mapRef.current!.animateCamera({
-        	center: {
-        		latitude,
-        		longitude,
-        	},
-        	zoom: 18,
-        }, {
-        	duration: 50,
-        });
-
-	}, [ myCoordination ]);
+	}, [ myCoordination, latitude, longitude ]);
 
 	return (
 		<MapView
+			onMapReady={ () => {
+				setMapRefObj(mapRef);
+			} }
 			ref={ mapRef }
 			provider={ PROVIDER_GOOGLE }
 			style={ {
@@ -66,7 +60,7 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination, onPressI
 					lat={ seat.lat }
 					lng={ seat.lng }
 					onPressMarker={ () => {
-						onPressItem(seat);
+						onPressPlace(seat);
 					} }
 				/>;
 			}) }

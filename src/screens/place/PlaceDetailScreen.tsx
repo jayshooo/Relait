@@ -22,8 +22,6 @@ export const PlaceDetailScreen = memo(() => {
 
 	const { selectedSeat } = useSelectedSeat();
 
-	console.log(selectedSeat);
-
 
 	return (
 		<SafeAreaView
