@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useState } from "react";
 import { SafeAreaView, View, Text, Image } from "react-native";
 import { Header } from "../../components/Header";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { TextSize, Color, FontWeight } from "../../constants/styles";
 import { InputBox } from "../../components/forms/InputBox";
@@ -172,12 +172,12 @@ export const PlaceRegistScreen = memo(() => {
 				flex: 1,
 				backgroundColor: Color.white,
 			} }>
+			<Header
+				title={ "자리 올리기" } />
 			<ScrollView
 				style={ {
 					flex: 1,
 				} }>
-				<Header
-					title={ "자리 올리기" } />
 				<View
 					style={ {
 						padding: 24,

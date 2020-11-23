@@ -4,7 +4,7 @@ import { TextSize, Color, FontWeight } from "../constants/styles";
 import { IPlugView, IListComponent } from "./types/ListComponent";
 import moment from "moment";
 
-const PlugView: FC<IPlugView> = ({ hasPlug = false }) => {
+export const PlugView: FC<IPlugView> = ({ hasPlug = false, fontSize = TextSize.h5, fontWeight = FontWeight.normal, iconSize = { width: 16, height: 16 } }) => {
 
 	const source = hasPlug ? require("../resources/icons/Plug.png") : require("../resources/icons/NoPlug.png");
 	const text = hasPlug ? "있음" : "없음";
@@ -14,12 +14,15 @@ const PlugView: FC<IPlugView> = ({ hasPlug = false }) => {
 		<View
 			style={ { flexDirection: "row" } }>
 			<Image
+				width={ iconSize.width }
+				height={ iconSize.height }
 				source={ source } />
 			<Text
 				style={ {
 					marginLeft: 4,
-					fontSize: TextSize.h5,
+					fontSize,
 					color,
+					fontWeight,
 				} }>콘센트 { text }</Text>
 		</View>
 	);
