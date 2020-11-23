@@ -9,7 +9,7 @@ import { Button } from "../../components/forms/Button";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { PickerButton } from "../../components/forms/PickerButton";
-import { CheckboxButtonInterface, PickerEnum, RegisterTimeType, RegisterDataInterface, SectionHeaderInterface } from "../types/RegisterPlaceScreen";
+import { CheckboxButtonInterface, PickerEnum, RegisterTimeType, RegisterDataInterface, SectionHeaderInterface } from "../types/PlaceRegistScreen";
 import { RootStackParamList } from "../../navigation/Navigation";
 
 const SectionHeader = memo<SectionHeaderInterface>(({ title }) => {
@@ -64,10 +64,9 @@ const CheckboxButton = memo<CheckboxButtonInterface>(({ title, isChecked, onPres
 	);
 });
 
-export const RegisterPlaceScreen = memo(() => {
+export const PlaceRegistScreen = memo(() => {
 
-	const navigation = useNavigation();
-	const { params } = useRoute<RouteProp<RootStackParamList, "RegisterPlaceScreen">>();
+	const { params } = useRoute<RouteProp<RootStackParamList, "PlaceRegistScreen">>();
 	const { selectedSeat } = params;
 
 	const [ showPicker, setShowPicker ] = useState(false);
@@ -104,10 +103,6 @@ export const RegisterPlaceScreen = memo(() => {
 		});
 
 	}, []);
-
-	const goBack = useCallback(() => {
-		navigation.goBack();
-	}, [ navigation ]);
 
 	const togglePicker = useCallback((type?: PickerEnum) => {
 		setShowPicker((prev) => !prev);
@@ -182,8 +177,7 @@ export const RegisterPlaceScreen = memo(() => {
 					flex: 1,
 				} }>
 				<Header
-					title={ "자리 올리기" }
-					onPress={ goBack } />
+					title={ "자리 올리기" } />
 				<View
 					style={ {
 						padding: 24,
