@@ -16,6 +16,13 @@ module.exports = {
     "no-mixed-spaces-and-tabs": "error",
     "object-curly-spacing": ["error", "always"],
     "computed-property-spacing": ["error", "always"],
+    "comma-dangle": ["error", {
+        "arrays": "never",
+        "objects": "always-multiline",
+        "imports": "never",
+        "exports": "never",
+        "functions": "never"
+    }],
     "array-bracket-spacing": ["error", "always"],
     "react/jsx-curly-spacing": ["error", {
       "when": "always",

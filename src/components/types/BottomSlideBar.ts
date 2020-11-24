@@ -1,5 +1,5 @@
-import { SlidingUpPanelAnimationConfig } from 'rn-sliding-up-panel';
-import { ISeat } from '../../store/reducers/seats/types';
+import { SlidingUpPanelAnimationConfig } from "rn-sliding-up-panel";
+import { ISeat } from "../../store/reducers/seats/types";
 
 export interface ITouchupBar {
     showText?: boolean;
@@ -9,5 +9,7 @@ export interface ITouchupBar {
 export interface IBottomSlideBar {
     bottomHeight: number;
     setShowHeader: (status: boolean) => void;
-    onPressItem: (seat: ISeat) => void;
+    onPressPlace: (seat: ISeat) => void;
+    isFiltered: boolean;
+    seats: ISeat[] | null;
 }

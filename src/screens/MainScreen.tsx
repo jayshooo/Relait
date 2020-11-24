@@ -1,4 +1,4 @@
-import React, { useState, useEffect, RefObject } from "react";
+import React, { useState, useEffect, RefObject, useCallback } from "react";
 import { Text, View, Image, Dimensions } from "react-native";
 import { checkNotifications, check, PERMISSIONS, RESULTS } from "react-native-permissions";
 import Geolocation from "react-native-geolocation-service";
@@ -15,12 +15,15 @@ import { IHeaderView } from "./types/MainScreen";
 import { getReverseGeocoding } from "../helpers/Geocoding";
 import { ILocation } from "../helpers/types";
 import { useDispatch, useSelector } from "react-redux";
-import { getSeats } from "../store/actions/seats/action";
+import { getSeats, setSelectedSeat } from "../store/actions/seats/action";
 import { RootState } from "../store/reducers";
 import { setAuthorizationHeader } from "../constants/api";
 import MapView from "react-native-maps";
 import { ISeat } from "../store/reducers/seats/types";
 import { useNavigation } from "@react-navigation/native";
+import { useSelectedSeat } from "../utils/hooks/useSelectedSeat";
+import { useSeats } from "../utils/hooks/useSeats";
+import useAsyncEffect from "use-async-effect";
 
 const bottomHeight = 53;
 const { width } = Dimensions.get("window");
@@ -162,11 +165,13 @@ const MainScreen = () => {
 	const [ hasPermission, setHasPermission ] = useState(true);
 	const [ showRequestPermissionModal, setShowRequestPermissionModal ] = useState(false);
 	const [ showHeader, setShowHeader ] = useState(true);
+	const [ filteredSeats, setFIlteredSeats ] = useState<ISeat[] | null>(null);
 	const [ myCoordination, setMyCoordination ] = useState<any>(null);
-	const { token } = useSelector((state: RootState) => state.myInfo);
 	const [ mapRefObj, setMapRefObj ] = useState<RefObject<MapView> | null>(null);
 	const [ makeSpot, setMakeSpot ] = useState(false);
-	const [ selectedSeat, setSelectedSeat ] = useState<ISeat | null>(null);
+	const { selectedSeat } = useSelectedSeat();
+	const { seats } = useSeats();
+	const { token } = useSelector((state: RootState) => state.myInfo);
 
 	useEffect(() => {
 
@@ -208,11 +213,11 @@ const MainScreen = () => {
 
 	};
 
-	const checkPermissions = async () => {
+	const checkPermissions = useCallback(async () => {
 		if (!await hasLocationPermission() || !await hasNotificationPermission()) {
 			setHasPermission(false);
 		}
-	};
+	}, []);
 
 	const [ currentAddress, setCurrentAddress ] = useState("");
 
@@ -222,15 +227,16 @@ const MainScreen = () => {
 	};
 
 	const dispatch = useDispatch();
-	const _getSeats = async () => {
-		try {
-			setAuthorizationHeader(token!);
-			await dispatch(getSeats());
-		}
-		catch (e) {
-			throw new Error(e);
-		}
-	};
+	// const _getSeats = useCallback(async () => {
+	// 	if (!token) {return;}
+	// 	try {
+	// 		setAuthorizationHeader(token!);
+	// 		await dispatch(getSeats());
+	// 	}
+	// 	catch (e) {
+	// 		throw new Error(e);
+	// 	}
+	// }, [ token, dispatch ]);
 
 	useEffect(() => {
 
@@ -250,11 +256,31 @@ const MainScreen = () => {
 		checkPermissions();
 		findMyLocation();
 
-	}, []);
+	}, [ checkPermissions ]);
+
+	useAsyncEffect(async () => {
+		if (!token) {return;}
+		try {
+			setAuthorizationHeader(token!);
+			await dispatch(getSeats());
+		}
+		catch (e) {
+			throw new Error(e);
+		}
+	}, [ token, dispatch ]);
 
 	useEffect(() => {
-		!!token && _getSeats();
-	}, [ token ]);
+		if (!selectedSeat) {return;}
+
+		const { lat, lng } = selectedSeat;
+
+		moveCamera({
+			mapRef: mapRefObj,
+			lat,
+			lng,
+		});
+
+	}, [ mapRefObj, selectedSeat ]);
 
 	const navigation = useNavigation();
 
@@ -274,34 +300,32 @@ const MainScreen = () => {
 
 	const goToReservationScreen = () => {
 		console.log("예약현황 스크린으로 이동");
+		// for test
+		navigation.navigate("PlaceDetailScreen");
 	};
 
 	const onPressWriteButton = () => {
 		setMakeSpot(true);
-	};
-
-	const onPressItem = (seat: ISeat) => {
-		if (!mapRefObj) {return;}
-		const { lat, lng } = seat;
-		moveCamera({
-			mapRef: mapRefObj,
-			lat,
-			lng,
-		});
-		setSelectedSeat(seat);
-		setMakeSpot(true);
 		setShowHeader(true);
 	};
 
+	const onPressPlace = useCallback((seat: ISeat) => {
+		if (!seats) {return;}
+		dispatch(setSelectedSeat(seat));
+		const filtered = seats.filter(s => s.id === seat.id);
+		setFIlteredSeats(filtered);
+
+	}, [ seats, dispatch ]);
+
 	const navigateToMakeSpotScreen = () => {
 		if (!selectedSeat) {return;}
-		navigation.navigate("RegisterPlaceScreen", {
+		navigation.navigate("PlaceRegistScreen", {
 			selectedSeat,
 		});
 	};
 
 	const goBack = () => {
-		setSelectedSeat(null);
+		dispatch(setSelectedSeat(null));
 		setMakeSpot(false);
 	};
 
@@ -313,11 +337,15 @@ const MainScreen = () => {
 			});
 		}
 
+		const isFiltered = !!filteredSeats;
+
 		return (
 			<BottomSlideBar
-				onPressItem={ (seat: ISeat) => {
-					onPressItem(seat);
+				onPressPlace={ (seat: ISeat) => {
+					onPressPlace(seat);
 				} }
+				seats={ isFiltered ? filteredSeats : seats }
+				isFiltered={ isFiltered }
 				bottomHeight={ bottomHeight }
 				setShowHeader={ setShowHeader } />
 		);
@@ -341,15 +369,17 @@ const MainScreen = () => {
 						goToReservationScreen={ goToReservationScreen }
 						findMyLocation={ findMyLocation } />
 				) }
-				<MapContainer
-					setMapRefObj={ (mapRef: RefObject<MapView>) => {
-						setMapRefObj(mapRef);
-					} }
-					onPressItem={ (seat: ISeat) => {
-						onPressItem(seat);
-					} }
-					myCoordination={ myCoordination } />
-				{ !makeSpot && <WriteButton
+				{ myCoordination && (
+					<MapContainer
+						setMapRefObj={ (mapRef: RefObject<MapView>) => {
+							setMapRefObj(mapRef);
+						} }
+						onPressPlace={ (seat: ISeat) => {
+							onPressPlace(seat);
+						} }
+						myCoordination={ myCoordination } />
+				) }
+				{ !makeSpot && !selectedSeat && <WriteButton
 					bottomHeight={ bottomHeight }
 					onPressWriteButton={ onPressWriteButton } /> }
 				<RequestPermissionModal

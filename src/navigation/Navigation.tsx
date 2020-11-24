@@ -6,7 +6,8 @@ import MainScreen from "../screens/MainScreen";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { RegisterPlaceScreen } from "../screens/place/RegisterPlaceScreen";
+import { PlaceRegistScreen } from "../screens/place/PlaceRegistScreen";
+import { PlaceDetailScreen } from "../screens/place/PlaceDetailScreen";
 import { ISeat } from "../store/reducers/seats/types";
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -15,9 +16,10 @@ export type RootStackParamList = {
     SplashScreen: undefined;
     LoginScreen: undefined;
     MainScreen: undefined;
-    RegisterPlaceScreen: {
+    PlaceRegistScreen: {
         selectedSeat: ISeat;
     };
+    PlaceDetailScreen: undefined;
 };
 
 const AppNavigation = () => {
@@ -38,8 +40,11 @@ const AppNavigation = () => {
 					name="MainScreen"
 					component={ MainScreen } />
 				<Stack.Screen
-					name="RegisterPlaceScreen"
-					component={ RegisterPlaceScreen } />
+					name="PlaceRegistScreen"
+					component={ PlaceRegistScreen } />
+				<Stack.Screen
+					name="PlaceDetailScreen"
+					component={ PlaceDetailScreen } />
 			</Stack.Navigator>
 		</NavigationContainer>
 	);
