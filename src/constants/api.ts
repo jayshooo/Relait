@@ -1,14 +1,14 @@
-import Axios from 'axios';
-import { BASE_URL } from './constants';
+import Axios from "axios";
+import { BASE_URL } from "./constants";
 
 export const httpClient = () => {
 
-    return Axios.create({
-        baseURL: BASE_URL,
-    });
+	return Axios.create({
+		baseURL: BASE_URL,
+	});
 
 };
 
 export const setAuthorizationHeader = async (token: string) => {
-    Axios.defaults.headers.common[ 'Authorization' ] = token;
+	Axios.defaults.headers.common.Authorization = token;
 };

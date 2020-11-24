@@ -1,9 +1,10 @@
 import { ISeatsInitialState } from "./types";
-import { SeatsActionTypes, GET_SEATS_SUCCESS, GET_SEATS_FAILED, SET_SELECTED_SEAT } from "../../actions/seats/types";
+import { SeatsActionTypes, GET_SEATS_SUCCESS, GET_SEATS_FAILED, SET_SELECTED_SEAT, GET_MY_SEAT_SUCCESS } from "../../actions/seats/types";
 
 const initialState = {
 	seats: [],
 	selectedSeat: null,
+	mySeat: null,
 };
 
 const seats = (state: ISeatsInitialState = initialState, action: SeatsActionTypes) => {
@@ -22,6 +23,16 @@ const seats = (state: ISeatsInitialState = initialState, action: SeatsActionType
 		return {
 			...state,
 			selectedSeat: action.seat,
+		};
+	case GET_MY_SEAT_SUCCESS:
+		return {
+			...state,
+			mySeat: action.seat,
+		};
+	case GET_SEATS_FAILED:
+		return {
+			...state,
+			seat: null,
 		};
 	default: return state;
 	}

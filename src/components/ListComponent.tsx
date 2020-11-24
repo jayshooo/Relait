@@ -29,7 +29,7 @@ export const PlugView: FC<IPlugView> = ({ hasPlug = false, fontSize = TextSize.h
 
 };
 
-export const ListComponent: FC<IListComponent> = ({ cafeName, leaveAt, thumbnailUrl, havePlug, onPressPlace }) => {
+export const ListComponent: FC<IListComponent> = ({ cafeName, leaveAt, thumbnailUrl, havePlug, onPressPlace, isFixed }) => {
 
 	const source = thumbnailUrl ? {
 		uri: thumbnailUrl,
@@ -46,6 +46,16 @@ export const ListComponent: FC<IListComponent> = ({ cafeName, leaveAt, thumbnail
 				justifyContent: "space-between",
 			} }
 			onPress={ onPressPlace }>
+			{ isFixed && (
+				<Image
+					source={ require("../resources/icons/Marker.png") }
+					resizeMode={ "cover" }
+					style={ {
+						width: 24,
+						height: 24,
+						marginRight: 32,
+						alignSelf: "center" } } />
+			) }
 			<View
 				style={ { justifyContent: "space-between", flex: 1 } }>
 				<Text

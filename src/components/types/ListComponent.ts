@@ -13,4 +13,12 @@ export interface IPlugView {
 
 export interface IListComponent extends Partial<ISeat> {
     onPressPlace: () => void;
+    isFixed: boolean;
+}
+
+export interface IListItem {
+    item: ISeat;
+    isFixed?: boolean;
+    onPressTouchBar?: () => void;
+    onPressPlace: (item: ISeat) => void;
 }

@@ -1,4 +1,9 @@
-import { IProfile } from '@react-native-seoul/kakao-login';
+import { IProfile } from "@react-native-seoul/kakao-login";
+
+export enum userRole {
+    "TAKER",
+    "GIVER"
+}
 
 export interface IMyInfoInitialState {
     myInfo: IProfile | null;

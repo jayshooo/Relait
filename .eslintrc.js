@@ -13,6 +13,7 @@ module.exports = {
     "no-bitwise": "off",
     "indent": ["error", "tab"],
     "no-console": "off",
+    "no-shadow": "off",
     "no-mixed-spaces-and-tabs": "error",
     "object-curly-spacing": ["error", "always"],
     "computed-property-spacing": ["error", "always"],
