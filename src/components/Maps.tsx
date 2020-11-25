@@ -5,6 +5,8 @@ import { useSeats } from "../utils/hooks/useSeats";
 import { moveCamera } from "../utils/Helpers";
 import { useSelectedSeat } from "../utils/hooks/useSelectedSeat";
 import { Image } from "react-native";
+import { useDispatch } from "react-redux";
+import { setMapRef } from "../store/actions/ui/action";
 
 
 export const MapMarker = ({ id, lat, lng, onPressMarker, isMyLocation = false }: IMapMarker) => {
@@ -42,12 +44,17 @@ export const MapMarker = ({ id, lat, lng, onPressMarker, isMyLocation = false }:
 	);
 };
 
-export const MapContainer: React.FC<IMapContainer> = ({ myCoordination, onPressPlace, setMapRefObj, mapStyle }) => {
+export const MapContainer: React.FC<IMapContainer> = ({ myCoordination, onPressPlace, mapStyle }) => {
 
 	const { latitude, longitude } = myCoordination;
 	const { seats } = useSeats();
+	const dispatch = useDispatch();
+	const mapRef = useRef<MapView | null>(null);
 
-	let mapRef = useRef<MapView | null>(null);
+	useEffect(() => {
+	    if (!mapRef) {return;}
+		dispatch(setMapRef(mapRef));
+	}, [ mapRef, dispatch ]);
 
 	useEffect(() => {
 
@@ -63,9 +70,6 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination, onPressP
 
 	return (
 		<MapView
-			onMapReady={ () => {
-				setMapRefObj(mapRef);
-			} }
 			ref={ mapRef }
 			provider={ PROVIDER_GOOGLE }
 			style={ mapStyle }>

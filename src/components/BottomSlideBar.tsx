@@ -91,7 +91,10 @@ export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeade
 		isExpand ? panel?.hide() : panel?.show();
 	}, [ isExpand ]);
 
-	const draggableRange = { top: height - 44, bottom: _bottomHeight };
+	const draggableRange = {
+		top: height - 44,
+		bottom: _bottomHeight,
+	};
 
 	const _onAnimatedValueChange = useCallback(({ value }: { value: number; }) => {
 
@@ -120,9 +123,14 @@ export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeade
 			friction={ 0.5 }
 			backdropOpacity={ 0 }
 			snappingPoints={ [ height - 44, _bottomHeight ] }
-			draggableRange={ { top: height - 44, bottom: _bottomHeight } }>
+			draggableRange={ {
+				top: height - 44,
+				bottom: _bottomHeight,
+			} }>
 			<View
-				style={ { flex: 1 } }>
+				style={ {
+					flex: 1,
+				} }>
 				<TouchupBar
 					showText={ !isExpand }
 					onPress={ onPressTouchBar } />

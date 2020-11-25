@@ -8,9 +8,17 @@ export const StatusBarHeight = isIphoneX ? 25 : 0;
 
 export const TabBarHeight = isIphoneX ? 34 : 0;
 
-export const moveCamera = ({ lat, lng, mapRef, }: { lat: number, lng: number, mapRef: RefObject<MapView> | null; }) => {
+export const moveCamera = ({ lat, lng, mapRef }: { lat: number, lng: number, mapRef: RefObject<MapView> | null; }) => {
 
 	if (!mapRef) {return;}
 
-    mapRef.current!.animateCamera({ center: { latitude: lat,longitude: lng, }, zoom: 18, }, { duration: 50, });
+    mapRef.current!.animateCamera({
+    	center: {
+    		latitude: lat,
+    		longitude: lng,
+    	},
+    	zoom: 18,
+    }, {
+    	duration: 50,
+    });
 };

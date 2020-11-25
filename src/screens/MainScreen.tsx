@@ -1,4 +1,4 @@
-import React, { useState, useEffect, RefObject, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Text, View, Image, Dimensions } from "react-native";
 import { checkNotifications, check, PERMISSIONS, RESULTS } from "react-native-permissions";
 import Geolocation from "react-native-geolocation-service";
@@ -18,13 +18,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMySeat, getSeats, setSelectedSeat } from "../store/actions/seats/action";
 import { RootState } from "../store/reducers";
 import { setAuthorizationHeader } from "../constants/api";
-import MapView from "react-native-maps";
 import { ISeat } from "../store/reducers/seats/types";
 import { useNavigation } from "@react-navigation/native";
 import { useSelectedSeat } from "../utils/hooks/useSelectedSeat";
 import { useSeats } from "../utils/hooks/useSeats";
 import useAsyncEffect from "use-async-effect";
 import { useRole } from "../utils/hooks/useRole";
+import { useMap } from "../utils/hooks/useMap";
 
 const bottomHeight = 53;
 const { height, width } = Dimensions.get("window");
@@ -169,15 +169,15 @@ const MainScreen = () => {
 	const [ fixedBottomBarHeight, setFixedBottomBarHeight ] = useState(0);
 	const [ filteredSeats, setFilteredSeats ] = useState<ISeat[] | null>(null);
 	const [ myCoordination, setMyCoordination ] = useState<any>(null);
-	const [ mapRefObj, setMapRefObj ] = useState<RefObject<MapView> | null>(null);
 	const [ makeSpot, setMakeSpot ] = useState(false);
 	const [ currentAddress, setCurrentAddress ] = useState("");
 	const { selectedSeat } = useSelectedSeat();
+	const { map } = useMap();
 	const { seats } = useSeats();
 	const { token } = useSelector((state: RootState) => state.myInfo);
+	const { isTaker, isGiver } = useRole();
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { isTaker, isGiver } = useRole();
 
 	useEffect(() => {
 
@@ -257,17 +257,17 @@ const MainScreen = () => {
 	}, [ token, dispatch ]);
 
 	useEffect(() => {
-		if (!selectedSeat) {return;}
+		if (!selectedSeat || !map) {return;}
 
 		const { lat, lng } = selectedSeat;
 
 		moveCamera({
-			mapRef: mapRefObj,
+			mapRef: map,
 			lat,
 			lng,
 		});
 
-	}, [ mapRefObj, selectedSeat ]);
+	}, [ map, selectedSeat ]);
 
 	const findMyLocation = useCallback(() => {
 		Geolocation.getCurrentPosition(info => {
@@ -293,10 +293,6 @@ const MainScreen = () => {
 
 	}, [ checkPermissions, findMyLocation ]);
 
-	const goToReservationScreen = () => {
-		console.log("예약현황 스크린으로 이동");
-	};
-
 	const onPressWriteButton = () => {
 		setMakeSpot(true);
 		setShowHeader(true);
@@ -310,18 +306,22 @@ const MainScreen = () => {
 		setShowHeader(true);
 	}, [ seats, dispatch ]);
 
-	const navigateToMakeSpotScreen = () => {
+	const navigateToMakeSpotScreen = useCallback(() => {
 		if (!selectedSeat) {return;}
 		navigation.navigate("PlaceRegistScreen", {
 			selectedSeat,
 		});
-	};
+	}, [ navigation, selectedSeat ]);
 
 	const goBack = useCallback(() => {
 		dispatch(setSelectedSeat(null));
 		setFilteredSeats(null);
 		setMakeSpot(false);
 	}, [ dispatch ]);
+
+	const goToReservationScreen = () => {
+		navigation.navigate("PlaceStatusScreen");
+	};
 
 	const isFiltered = !!filteredSeats;
 
@@ -388,9 +388,6 @@ const MainScreen = () => {
 				) }
 				{ myCoordination && (
 					<MapContainer
-						setMapRefObj={ (mapRef: RefObject<MapView>) => {
-							setMapRefObj(mapRef);
-						} }
 						onPressPlace={ (seat: ISeat) => {
 							onPressPlace(seat);
 						} }

@@ -1,7 +1,8 @@
-import { StyleProp, ViewStyle, LayoutRectangle } from 'react-native';
-import { FontWeight } from '../../constants/styles';
+import { StyleProp, ViewStyle, LayoutRectangle } from "react-native";
+import { FontWeight } from "../../constants/styles";
 
 export interface ICommonButton {
+    isAbsolute?: boolean;
     onLayout?: (nativeEvent: LayoutRectangle) => void;
     icon?: number;
     hasShadow?: boolean;

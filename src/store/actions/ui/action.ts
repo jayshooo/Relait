@@ -1,4 +1,4 @@
-import { SHOW_ALERT, HIDE_ALERT, AlertContentInterface } from "./types";
+import { SHOW_ALERT, HIDE_ALERT, AlertContentInterface, SET_MAP_REF, SetMapRefInterface } from "./types";
 
 export const showAlert = (data: AlertContentInterface) => ({
 	type: SHOW_ALERT,
@@ -7,4 +7,9 @@ export const showAlert = (data: AlertContentInterface) => ({
 
 export const hideAlert = () => ({
 	type: HIDE_ALERT,
+});
+
+export const setMapRef = (map: SetMapRefInterface["map"]) => ({
+	type: SET_MAP_REF,
+	map,
 });

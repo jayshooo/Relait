@@ -24,12 +24,20 @@ module.exports = {
         "exports": "never",
         "functions": "never"
     }],
+    "no-mixed-spaces-and-tabs": "off",
     "array-bracket-spacing": ["error", "always"],
     "react/jsx-curly-spacing": ["error", {
       "when": "always",
       "children": true,
       "allowMultiline": true,
     }],
+    "object-curly-newline": ["error", {
+        "ObjectExpression": "always",
+        "ObjectPattern": { "multiline": true },
+        "ImportDeclaration": "never",
+        "ExportDeclaration": { "multiline": true }
+    }],
+    "object-property-newline": "error",
     "react/jsx-max-props-per-line": ["error", { "maximum": 1 }],
     "react/jsx-indent-props": ["error", 'tab'],
     "react/jsx-first-prop-new-line": ["error", "always"],
