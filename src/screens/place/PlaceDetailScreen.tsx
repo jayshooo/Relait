@@ -1,13 +1,17 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import moment from "moment";
 import { ScrollView, SafeAreaView, View, Text, TouchableOpacity, Image, ActionSheetIOS } from "react-native";
 import { Header } from "../../components/Header";
 import { Color, FontWeight, TextSize } from "../../constants/styles";
 import { useSelectedSeat } from "../../utils/hooks/useSelectedSeat";
 import { PlugView } from "../../components/ListComponent";
-import { ISection } from "../types/PlaceDetailScreen";
+import { IPlaceDetailScreen, ISection } from "../types/PlaceDetailScreen";
 import { FixedButton } from "../../components/FixedButton";
 import { isIphoneX } from "../../utils/Helpers";
+import { ISeat } from "../../store/reducers/seats/types";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { RootStackParamList } from "../../navigation/Navigation";
+import { useRole } from "../../utils/hooks/useRole";
 
 const HeaderRight = memo(() => {
 	const onPress = useCallback(() => {
@@ -62,14 +66,27 @@ const Section = memo<ISection>(({ title, description }) => {
 	);
 });
 
-export const PlaceDetailScreen = memo(() => {
+export const PlaceDetailScreen = memo<IPlaceDetailScreen>(() => {
 
 	const { selectedSeat } = useSelectedSeat();
+	const { params } = useRoute<RouteProp<RootStackParamList, "PlaceDetailScreen">>();
+
 	const [ bottomButtonHeight, setBottomButtonHeight ] = useState(0);
+	const [ currentSeat, setCurrentSeat ] = useState<ISeat | null>(null);
 
-	if (!selectedSeat) {return null;}
+	useEffect(() => {
+		if (params && params.seat) {
+			const { seat } = params;
+			setCurrentSeat(seat);
+		}
+		else {
+			setCurrentSeat(selectedSeat);
+		}
+	}, [ selectedSeat, params ]);
 
-	const { leaveAt, cafeName, address, thumbnailUrl, descriptionSeat, descriptionGiver } = selectedSeat;
+	if (!currentSeat) {return null;}
+
+	const { leaveAt, cafeName, address, thumbnailUrl, descriptionSeat, descriptionGiver } = currentSeat;
 	const _leavTime = moment.utc(leaveAt).format("HH:mm");
 	const source = thumbnailUrl ? {
 		uri: thumbnailUrl,
@@ -90,7 +107,10 @@ export const PlaceDetailScreen = memo(() => {
 					marginBottom: isIphoneX ? bottomButtonHeight - 34 : bottomButtonHeight,
 				} }>
 				<View
-					style={ { marginTop: 20, paddingHorizontal: 24 } }>
+					style={ {
+						marginTop: 20,
+						paddingHorizontal: 24,
+					} }>
 					<Text
 						style={ {
 							fontSize: TextSize.h1,
@@ -98,7 +118,9 @@ export const PlaceDetailScreen = memo(() => {
 							fontWeight: FontWeight.bold,
 						} }>{ cafeName }</Text>
 					<View
-						style={ { marginTop: 24 } }>
+						style={ {
+							marginTop: 24,
+						} }>
 						<Text
 							style={ {
 								fontSize: TextSize.h4,
@@ -140,7 +162,9 @@ export const PlaceDetailScreen = memo(() => {
 					</View>
 				</View>
 				<View
-					style={ { marginVertical: 40 } }>
+					style={ {
+						marginVertical: 40,
+					} }>
 					<Image
 						resizeMode={ "cover" }
 						style={ {
@@ -169,9 +193,10 @@ export const PlaceDetailScreen = memo(() => {
 				</View>
 			</ScrollView>
 			<FixedButton
+				seat={ currentSeat }
 				setBottomButtonHeight={ (height) => {
 					setBottomButtonHeight(height);
-				} }/>
+				} } />
 		</SafeAreaView>
 	);
 });

@@ -41,7 +41,7 @@ export const getMySeat = () => async (dispatch: Dispatch) => {
 	dispatch({
 		type: GET_MY_SEAT_SUCCESS,
 		seat: {
-			"id": 18,
+			"id": 123123,
 			"giverId": 12,
 			"leaveAt": 1587550606,
 			"descriptionGiver": "파란색 후드티 입고 있습니다",

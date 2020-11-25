@@ -1,4 +1,4 @@
-import { AlertContentInterface } from '../../actions/ui/types';
+import { AlertContentInterface, SetMapRefInterface } from "../../actions/ui/types";
 
 interface AlertObjInterface extends AlertContentInterface {
     visible: boolean;
@@ -6,4 +6,5 @@ interface AlertObjInterface extends AlertContentInterface {
 
 export interface UiInitialState {
     alertObj: AlertObjInterface;
+    map: SetMapRefInterface["map"];
 }

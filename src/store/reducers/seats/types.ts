@@ -1,7 +1,7 @@
 export interface ISeat {
     id: number;
     giverId: number;
-    leaveAt: string;
+    leaveAt: number;
     descriptionGiver: string;
     seatStatus: number;
     cafeName: string;
@@ -12,9 +12,9 @@ export interface ISeat {
     havePlug: number;
     thumbnailUrl: string;
     descriptionSeat: string;
-    descriptionCloseTime: string;
+    descriptionCloseTime: number;
     takerId: number;
-    takenAt: string;
+    takenAt: number;
 }
 
 export interface ISeatsInitialState {

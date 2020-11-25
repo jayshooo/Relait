@@ -1,28 +1,27 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { Color, FontWeight, TextSize } from "../constants/styles";
-import { useSelectedSeat } from "../utils/hooks/useSelectedSeat";
 import { useMySeat } from "../utils/hooks/useMySeat";
 import { IFixedButton } from "./types/FixedButton";
 import { isIphoneX } from "../utils/Helpers";
 import { useDispatch } from "react-redux";
 import { hideAlert, showAlert } from "../store/actions/ui/action";
 
-export const FixedButton = memo<IFixedButton>(({ setBottomButtonHeight }) => {
+export const FixedButton = memo<IFixedButton>(({ setBottomButtonHeight, seat }) => {
 
-	const { selectedSeat } = useSelectedSeat();
 	const { mySeat } = useMySeat();
 	const dispatch = useDispatch();
 	const [ isMyReservation, setIsMyReservation ] = useState(false);
 
 	useEffect(() => {
 
-		if (!selectedSeat || !mySeat) {return;}
-		const available = selectedSeat.id === mySeat.id;
+		// TODO. 버튼 보이는 로직 수정
+		if (!mySeat || !seat) {return;}
+		const available = mySeat.id === seat.id;
 
 		setIsMyReservation(available);
 
-	}, [ mySeat, selectedSeat ]);
+	}, [ seat, mySeat ]);
 
 	const buttonColor = !isMyReservation ? Color.purplishBlue : Color.darkTwo;
 	const label = isMyReservation ? "예약 취소하기" : "자리 예약하기";

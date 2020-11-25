@@ -3,7 +3,7 @@ import { View, Image, TouchableHighlight, Text, StyleProp, ViewStyle } from "rea
 import { TextSize, FontWeight } from "../constants/styles";
 import { ICommonButton } from "./types/CommonButton";
 
-const CommonButton = ({ onLayout, icon, buttonTitle, onPressCallback, buttonColor, textColor, fontWeight = FontWeight.normal, hasShadow = true, additioinalStyle = null }: ICommonButton) => {
+const CommonButton = ({ onLayout, icon, buttonTitle, onPressCallback, buttonColor, textColor, fontWeight = FontWeight.normal, hasShadow = true, additioinalStyle = null, isAbsolute = true }: ICommonButton) => {
 
 	const hasIcon = !!icon;
 	const shadowStyle: StyleProp<ViewStyle> = {
@@ -11,14 +11,25 @@ const CommonButton = ({ onLayout, icon, buttonTitle, onPressCallback, buttonColo
 		shadowOpacity: 1,
 		elevation: 4,
 		shadowRadius: 12,
-		shadowOffset: { width: 1, height: 18 },
+		shadowOffset: {
+			width: 1,
+			height: 18,
+		},
 	};
 
-	const defaultStyle: StyleProp<ViewStyle> = {
+	const defaultStyle: StyleProp<ViewStyle> = isAbsolute ? {
 		position: "absolute",
 		left: 24,
 		right: 24,
 		bottom: 40,
+		backgroundColor: buttonColor,
+		paddingVertical: 16,
+		borderRadius: 8,
+	} : {
+		// position: "absolute",
+		// left: 24,
+		// right: 24,
+		// bottom: 40,
 		backgroundColor: buttonColor,
 		paddingVertical: 16,
 		borderRadius: 8,
@@ -45,7 +56,6 @@ const CommonButton = ({ onLayout, icon, buttonTitle, onPressCallback, buttonColo
 			} }>
 			<View
 				style={ {
-					flex: 1,
 					flexDirection: "row",
 					alignItems: "center",
 					justifyContent: "center",
