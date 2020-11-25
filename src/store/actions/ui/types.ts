@@ -1,9 +1,9 @@
 import {
-    AlertButton,
-} from 'react-native';
+	AlertButton
+} from "react-native";
 
-export const SHOW_ALERT = 'SHOW_ALERT';
-export const HIDE_ALERT = 'HIDE_ALERT';
+export const SHOW_ALERT = "SHOW_ALERT";
+export const HIDE_ALERT = "HIDE_ALERT";
 
 export interface AlertContentInterface {
     title: string;

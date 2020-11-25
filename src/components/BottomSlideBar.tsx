@@ -1,18 +1,36 @@
-import React, { FC, useState, useCallback, useEffect } from "react";
-import { View, Text, Dimensions, Animated, ListRenderItem } from "react-native";
-import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
+import React, { FC, useState, useCallback, useEffect, memo } from "react";
+import { View, Text, Dimensions, Animated, TouchableOpacity, FlatList } from "react-native";
 import { Color, TextSize } from "../constants/styles";
 import SlidingUpPanel from "rn-sliding-up-panel";
-import { ITouchupBar, IBottomSlideBar } from "./types/BottomSlideBar";
+import { ITouchupBar, IBottomSlideBar, IFixedBottomBar } from "./types/BottomSlideBar";
 import { isIphoneX } from "../utils/Helpers";
 import { ListComponent } from "./ListComponent";
-import { ISeat } from "../store/reducers/seats/types";
+import { IListItem } from "./types/ListComponent";
+import { useNavigation } from "@react-navigation/native";
 
 const { height } = Dimensions.get("window");
 
 let panel: SlidingUpPanel | null = null;
 
-const TouchupBar: FC<ITouchupBar> = ({ showText = true, onPress }) => {
+const ListItem = memo<IListItem>(({ item, onPressTouchBar, onPressPlace, isFixed = false }) => {
+	if (!item) {return null;}
+	return (
+		<ListComponent
+			key={ item.address }
+			onPressPlace={ () => {
+				onPressPlace(item);
+				if (!onPressTouchBar) {return;}
+				onPressTouchBar();
+			} }
+			cafeName={ item.cafeName }
+			leaveAt={ item.leaveAt }
+			thumbnailUrl={ item.thumbnailUrl }
+			havePlug={ item.havePlug }
+			isFixed={ isFixed } />
+	);
+});
+
+const TouchupBar: FC<ITouchupBar> = ({ showText = true, onPress, isFixed = false }) => {
 
 	const paddingBottom = showText && isIphoneX ? 50 : 34;
 
@@ -32,14 +50,16 @@ const TouchupBar: FC<ITouchupBar> = ({ showText = true, onPress }) => {
 				if (!onPress) {return;}
 				onPress();
 			} }>
-			<View
-				style={ {
-					width: 36,
-					height: 5,
-					backgroundColor: Color.black,
-					opacity: 0.2,
-					borderRadius: 2.5,
-				} } />
+			{ !isFixed && (
+				<View
+					style={ {
+						width: 36,
+						height: 5,
+						backgroundColor: Color.black,
+						opacity: 0.2,
+						borderRadius: 2.5,
+					} } />
+			) }
 			{ showText && (
 				<Text
 					style={ {
@@ -52,13 +72,12 @@ const TouchupBar: FC<ITouchupBar> = ({ showText = true, onPress }) => {
 	);
 };
 
-export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeader, onPressPlace, seats, isFiltered }) => {
+export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeader, onPressPlace, seats }) => {
 
 	const [ isExpand, setIsExpand ] = useState(false);
 	const _bottomHeight = isIphoneX ? bottomHeight + 34 : bottomHeight;
 	const [ animatedValue, setAnimatedValue ] = useState(new Animated.Value(0));
 	const [ allowDrag, setAllowDrag ] = useState(true);
-	// const { seats } = useSeats();
 
 	useEffect(() => {
 		setAnimatedValue(new Animated.Value(_bottomHeight));
@@ -66,7 +85,7 @@ export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeade
 
 	useEffect(() => {
 		setShowHeader(!isExpand);
-	}, [ isExpand ]);
+	}, [ isExpand, setShowHeader ]);
 
 	const onPressTouchBar = useCallback(() => {
 		isExpand ? panel?.hide() : panel?.show();
@@ -89,24 +108,6 @@ export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeade
 	}, [ draggableRange ]);
 
 	animatedValue.addListener(_onAnimatedValueChange);
-
-	const _renderItem: ListRenderItem<ISeat> = ({ item }) => {
-		if (!item) {return null;}
-		return (
-			<ListComponent
-				key={ item.address }
-				onPressPlace={ () => {
-					onPressTouchBar();
-					onPressPlace(item);
-				} }
-				cafeName={ item.cafeName }
-				leaveAt={ item.leaveAt }
-				thumbnailUrl={ item.thumbnailUrl }
-				havePlug={ item.havePlug } />
-		);
-	};
-
-	const showText = !isExpand && !isFiltered;
 
 	return (
 		<SlidingUpPanel
@@ -145,10 +146,69 @@ export const BottomSlideBar: FC<IBottomSlideBar> = ({ bottomHeight, setShowHeade
 					contentContainerStyle={ {
 						paddingBottom: _bottomHeight,
 					} }
-					// seats를 내려받고, 선택인지 아닌지 플래그 받아야함 플래그에 따라 UI 변경됨
 					data={ seats }
-					renderItem={ _renderItem } />
+					renderItem={ ({ item }) => {
+						return (
+							<ListItem
+								item={ item }
+								onPressTouchBar={ onPressTouchBar }
+								onPressPlace={ onPressPlace }
+							/>
+						);
+					} } />
 			</View>
 		</SlidingUpPanel>
 	);
 };
+
+export const FixedBottomBar = memo<IFixedBottomBar>(({ onPressPlace, seats, setHeight }) => {
+
+	const navigation = useNavigation();
+	const bottom = isIphoneX ? 58 : 24;
+	const goPlaceDetail = useCallback(() => {
+		navigation.navigate("PlaceDetailScreen");
+	}, [ navigation ]);
+
+	return (
+		<View
+			onLayout={ ({ nativeEvent }) => {
+				if (!nativeEvent || !setHeight) {return;}
+				const { layout: { height }  } = nativeEvent;
+				setHeight(height);
+			} }
+			style={ {
+				position: "absolute",
+				bottom: 0,
+				left: 0,
+				right: 0,
+			} }>
+			<TouchupBar
+				showText={ false }
+				isFixed={ true } />
+			<FlatList
+				keyExtractor={ (item) => {
+					return item.id.toString();
+				} }
+				style={ {
+					backgroundColor: Color.white,
+					paddingHorizontal: 24,
+				} }
+				contentContainerStyle={ {
+					paddingBottom: bottom,
+				} }
+				data={ seats }
+				renderItem={ ({ item }) => {
+					return (
+						<ListItem
+							item={ item }
+							isFixed={ true }
+							onPressPlace={ (seat) => {
+								onPressPlace(seat);
+								goPlaceDetail();
+							} }
+						/>
+					);
+				} } />
+		</View>
+	);
+});

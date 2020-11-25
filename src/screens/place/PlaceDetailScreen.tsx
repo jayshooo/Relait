@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useState } from "react";
 import moment from "moment";
 import { ScrollView, SafeAreaView, View, Text, TouchableOpacity, Image, ActionSheetIOS } from "react-native";
 import { Header } from "../../components/Header";
@@ -6,6 +6,8 @@ import { Color, FontWeight, TextSize } from "../../constants/styles";
 import { useSelectedSeat } from "../../utils/hooks/useSelectedSeat";
 import { PlugView } from "../../components/ListComponent";
 import { ISection } from "../types/PlaceDetailScreen";
+import { FixedButton } from "../../components/FixedButton";
+import { isIphoneX } from "../../utils/Helpers";
 
 const HeaderRight = memo(() => {
 	const onPress = useCallback(() => {
@@ -63,6 +65,7 @@ const Section = memo<ISection>(({ title, description }) => {
 export const PlaceDetailScreen = memo(() => {
 
 	const { selectedSeat } = useSelectedSeat();
+	const [ bottomButtonHeight, setBottomButtonHeight ] = useState(0);
 
 	if (!selectedSeat) {return null;}
 
@@ -84,6 +87,7 @@ export const PlaceDetailScreen = memo(() => {
 			<ScrollView
 				style={ {
 					flex: 1,
+					marginBottom: isIphoneX ? bottomButtonHeight - 34 : bottomButtonHeight,
 				} }>
 				<View
 					style={ { marginTop: 20, paddingHorizontal: 24 } }>
@@ -164,6 +168,10 @@ export const PlaceDetailScreen = memo(() => {
 					) }
 				</View>
 			</ScrollView>
+			<FixedButton
+				setBottomButtonHeight={ (height) => {
+					setBottomButtonHeight(height);
+				} }/>
 		</SafeAreaView>
 	);
 });

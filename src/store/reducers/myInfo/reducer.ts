@@ -5,6 +5,7 @@ const initialState = {
 	myInfo: null,
 	isLogin: false,
 	token: null,
+	mySeat: null,
 };
 
 const myInfo = (state: IMyInfoInitialState = initialState, action: MyInfoActionTypes) => {
