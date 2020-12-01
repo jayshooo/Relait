@@ -15,11 +15,12 @@ export const FixedButton = memo<IFixedButton>(({ setBottomButtonHeight, seat }) 
 
 	useEffect(() => {
 
-		// TODO. 버튼 보이는 로직 수정
 		if (!mySeat || !seat) {return;}
-		const available = mySeat.id === seat.id;
 
-		setIsMyReservation(available);
+		// TODO. 여기 수정해줘야함
+		const isMySeat = mySeat.id === seat.id;
+
+		setIsMyReservation(isMySeat);
 
 	}, [ seat, mySeat ]);
 

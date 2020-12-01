@@ -11,7 +11,7 @@ import { isIphoneX } from "../../utils/Helpers";
 import { ISeat } from "../../store/reducers/seats/types";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigation/Navigation";
-import { useRole } from "../../utils/hooks/useRole";
+import { useMySeat } from "../../utils/hooks/useMySeat";
 
 const HeaderRight = memo(() => {
 	const onPress = useCallback(() => {
@@ -69,10 +69,12 @@ const Section = memo<ISection>(({ title, description }) => {
 export const PlaceDetailScreen = memo<IPlaceDetailScreen>(() => {
 
 	const { selectedSeat } = useSelectedSeat();
+	const { mySeat } = useMySeat();
 	const { params } = useRoute<RouteProp<RootStackParamList, "PlaceDetailScreen">>();
 
 	const [ bottomButtonHeight, setBottomButtonHeight ] = useState(0);
 	const [ currentSeat, setCurrentSeat ] = useState<ISeat | null>(null);
+	const [ isMySeat, setIsMySeat ] = useState(false);
 
 	useEffect(() => {
 		if (params && params.seat) {
@@ -83,6 +85,11 @@ export const PlaceDetailScreen = memo<IPlaceDetailScreen>(() => {
 			setCurrentSeat(selectedSeat);
 		}
 	}, [ selectedSeat, params ]);
+
+	useEffect(() => {
+		if (!currentSeat || !mySeat) {return;}
+		setIsMySeat(currentSeat.id === mySeat.id);
+	}, [ currentSeat, mySeat ]);
 
 	if (!currentSeat) {return null;}
 
@@ -99,8 +106,7 @@ export const PlaceDetailScreen = memo<IPlaceDetailScreen>(() => {
 				backgroundColor: Color.white,
 			} }>
 			<Header
-				title={ "자리 올리기" }
-				renderRight={ <HeaderRight /> } />
+				renderRight={ isMySeat && <HeaderRight /> } />
 			<ScrollView
 				style={ {
 					flex: 1,
@@ -192,11 +198,11 @@ export const PlaceDetailScreen = memo<IPlaceDetailScreen>(() => {
 					) }
 				</View>
 			</ScrollView>
-			<FixedButton
+			{ !isMySeat && <FixedButton
 				seat={ currentSeat }
 				setBottomButtonHeight={ (height) => {
 					setBottomButtonHeight(height);
-				} } />
+				} } /> }
 		</SafeAreaView>
 	);
 });

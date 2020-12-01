@@ -55,7 +55,7 @@ export const getMySeat = () => async (dispatch: Dispatch) => {
 			"thumbnailUrl": "https://img1.daumcdn.net/thumb/T680x420/?fname=http%3A%2F%2Ft1.daumcdn.net%2Fplace%2F0B921DBD85AF4DADB961ABDBD5437A03",
 			"descriptionSeat": "창가 자리예요",
 			"descriptionCloseTime": 1587550606,
-			"takerId": 1,
+			"takerId": 12,
 			"takenAt": 1587550606,
 		},
 	});

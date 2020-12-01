@@ -29,7 +29,7 @@ import { useMap } from "../utils/hooks/useMap";
 const bottomHeight = 53;
 const { height, width } = Dimensions.get("window");
 
-const makeSpotPanel = ({ seat, onPress }: { seat: null | ISeat; onPress: () => void; }) => {
+const MakeSpotPanel = ({ seat, onPress }: { seat: null | ISeat; onPress: () => void; }) => {
 
 	const hasSeat = !!seat;
 	const spotName = hasSeat ? seat!.cafeName : "어디서 작업 중이야?";
@@ -326,12 +326,6 @@ const MainScreen = () => {
 	const isFiltered = !!filteredSeats;
 
 	const bottomView = () => {
-		if (makeSpot) {
-			return makeSpotPanel({
-				seat: selectedSeat,
-				onPress: navigateToMakeSpotScreen,
-			});
-		}
 
 		if (isFiltered) {
 			return (
@@ -356,13 +350,24 @@ const MainScreen = () => {
 				bottomHeight={ bottomHeight }
 				setShowHeader={ setShowHeader } />
 		);
+
+	};
+
+	const makeSpotBottomView = () => {
+
+		return (
+			<MakeSpotPanel
+				seat={ selectedSeat }
+				onPress={ navigateToMakeSpotScreen }/>
+		);
+
 	};
 
 	const showWriteButton = !makeSpot && !isTaker && !isGiver;
 
 	const baseBottomPosition = 24;
 	const writeButtonBottomPosition = isFiltered ? fixedBottomBarHeight + baseBottomPosition : bottomHeight + TabBarHeight + baseBottomPosition;
-	const mapStyle = isFiltered ? {
+	const mapStyle = isFiltered && !makeSpot ? {
 		height: height - writeButtonBottomPosition,
 	} : {
 		flex: 1,
@@ -405,7 +410,7 @@ const MainScreen = () => {
 						setHasPermission(true);
 					} } />
 			</View>
-			{ bottomView() }
+			{ makeSpot ? makeSpotBottomView() : bottomView() }
 		</View>
 	);
 };

@@ -62,7 +62,7 @@ const LoginScreen: React.FC = () => {
 						fontSize: TextSize.h1,
 					} }>
 					오늘은 또
-                </Text>
+				</Text>
 				<Text
 					style={
 						{
@@ -70,7 +70,7 @@ const LoginScreen: React.FC = () => {
 							fontWeight: FontWeight.bold,
 						} as TextStyle
 					}>
-					어디서 작업할지{"\n"}막막해?
+					어디서 작업할지{ "\n" }막막해?
 				</Text>
 			</View>
 			<CommonButton
