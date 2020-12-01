@@ -3,7 +3,7 @@ import { IMyInfoInitialState } from "../../reducers/myInfo/types";
 import { Dispatch } from "redux";
 import { httpClient } from "../../../constants/api";
 
-export const doLogin = (uniqueId: string) => async (dispatch: Dispatch) => {
+export const doLogin = (uniqueId: number) => async (dispatch: Dispatch) => {
 
 	dispatch({
 		type: LOGIN_REQUEST,

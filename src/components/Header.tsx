@@ -23,7 +23,7 @@ export const Header: React.FC<HeaderInterface> = memo(({ onPress, title, renderR
 				alignItems: "center",
 				justifyContent: "center",
 				paddingTop: 15,
-				paddingBottom: 24,
+				paddingBottom: 36,
 			} }>
 			<TouchableOpacity
 				style={ {
