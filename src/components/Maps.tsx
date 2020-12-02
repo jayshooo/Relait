@@ -28,11 +28,12 @@ export const MapMarker = ({ id, lat, lng, onPressMarker, isMyLocation = false }:
 
 	return (
 		<Marker
-			zIndex={ isSelected ? 10 : 0 }
+			zIndex={ isSelected ? 10 : 1 }
 			coordinate={ {
 				latitude: lat,
 				longitude: lng,
 			} }
+			onStartShouldSetResponderCapture={ () => true }
 			onPress={ () => {
 				if (!onPressMarker) {return;}
 				onPressMarker();
@@ -44,7 +45,7 @@ export const MapMarker = ({ id, lat, lng, onPressMarker, isMyLocation = false }:
 	);
 };
 
-export const MapContainer: React.FC<IMapContainer> = ({ myCoordination, onPressPlace, mapStyle }) => {
+export const MapContainer: React.FC<IMapContainer> = ({ myCoordination, onPressPlace, mapStyle, onPressMap }) => {
 
 	const { latitude, longitude } = myCoordination;
 	const { seats } = useSeats();
@@ -72,7 +73,13 @@ export const MapContainer: React.FC<IMapContainer> = ({ myCoordination, onPressP
 		<MapView
 			ref={ mapRef }
 			provider={ PROVIDER_GOOGLE }
-			style={ mapStyle }>
+			style={ mapStyle }
+			onPress={ (e) => {
+				const target = e.target as any;
+				const isMap = target.viewConfig.uiViewClassName === "AIRGoogleMap";
+				if (!onPressMap || !isMap) {return;}
+				onPressMap();
+			} }>
 			<MapMarker
 				lat={ latitude }
 				lng={ longitude }

@@ -39,7 +39,7 @@ const TouchupBar: FC<ITouchupBar> = ({ showText = true, onPress, isFixed = false
 			activeOpacity={ 1 }
 			style={ {
 				backgroundColor: Color.white,
-				paddingTop: 8,
+				paddingTop: isFixed ? 0 : 8,
 				paddingBottom,
 				justifyContent: "flex-start",
 				alignItems: "center",

@@ -12,6 +12,7 @@ export interface IMapContainer {
         speed: number;
     };
     onPressPlace: (seat: ISeat) => void;
+    onPressMap?: () => void;
     mapStyle: StyleProp<ViewStyle>;
 }
 

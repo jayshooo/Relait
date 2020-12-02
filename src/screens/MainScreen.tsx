@@ -319,9 +319,9 @@ const MainScreen = () => {
 		setMakeSpot(false);
 	}, [ dispatch ]);
 
-	const goToReservationScreen = () => {
+	const goToReservationScreen = useCallback(() => {
 		navigation.navigate("PlaceStatusScreen");
-	};
+	}, [ navigation ]);
 
 	const isFiltered = !!filteredSeats;
 
@@ -396,6 +396,7 @@ const MainScreen = () => {
 						onPressPlace={ (seat: ISeat) => {
 							onPressPlace(seat);
 						} }
+						onPressMap={ goBack }
 						myCoordination={ myCoordination }
 						mapStyle={ mapStyle } />
 				) }
