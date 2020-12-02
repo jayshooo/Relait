@@ -34,7 +34,7 @@ const SectionHeader = memo<SectionHeaderInterface>(({ title }) => {
 
 const CheckboxButton = memo<CheckboxButtonInterface>(({ title, isChecked, onPressCheckboxButton }) => {
 	// TODO. 아이콘 작업 해야함
-	const source = isChecked ? require("../../resources/icons/Unchecked.png") : require("../../resources/icons/Unchecked.png");
+	const source = isChecked ? require("../../resources/icons/Checked.png") : require("../../resources/icons/Unchecked.png");
 
 	return (
 		<TouchableOpacity
@@ -196,6 +196,7 @@ export const PlaceRegistScreen = memo(() => {
 					style={ {
 						paddingHorizontal: 24,
 						marginTop: 40,
+						marginBottom: 24,
 					} }>
 					<SectionHeader
 						title={ "작업 중인 자리" } />
@@ -298,7 +299,9 @@ export const PlaceRegistScreen = memo(() => {
 								height: 96,
 							} }
 							onChangeText={ (value) => {
-								onChangeText({ "descriptionSeat": value });
+								onChangeText({
+									"descriptionSeat": value,
+								});
 							} }
 						/>
 						<InputBox
@@ -313,7 +316,9 @@ export const PlaceRegistScreen = memo(() => {
 								height: 96,
 							} }
 							onChangeText={ (value) => {
-								onChangeText({ "descriptionGiver": value });
+								onChangeText({
+									"descriptionGiver": value,
+								});
 							} }
 						/>
 					</View>
